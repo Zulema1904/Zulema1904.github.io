@@ -698,6 +698,25 @@ code {
   font-size: 14.5px; line-height: 1.65;
 }
 .nb-page:focus { outline: none; }
+.nb-page { position: relative; }
+.nb-index {
+  list-style: none; margin: 0 0 24px; padding: 10px 14px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2px 14px;
+  background: #fff; border: 2px dashed color-mix(in srgb, var(--tab) 80%, var(--dk));
+  transform: rotate(-.4deg);
+}
+.nb-index button {
+  width: 100%; padding: 2px 0; background: none; border: 0; cursor: pointer;
+  text-align: left; font: 13.5px/1.4 var(--font-mono); color: var(--ink);
+}
+.nb-index button:hover { text-decoration: underline; text-decoration-color: var(--tab); text-decoration-thickness: 3px; }
+.nb-index b { color: var(--muted); margin-right: 4px; }
+.nb-index code { font-size: 12px; }
+.nb-num {
+  display: inline-block; margin-right: 8px; padding: 0 6px;
+  background: var(--dk); color: var(--tab);
+  font: 700 15px/1.5 var(--font-term); vertical-align: 4px;
+}
 .nb-title { margin: 0 0 12px; font: 700 40px/1.1 'Caveat', var(--font-ui); color: var(--ink); }
 .nb-title span { display: inline-block; transform: rotate(-8deg); }
 .nb-sec { margin-bottom: 26px; }

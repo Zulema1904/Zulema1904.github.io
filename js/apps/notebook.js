@@ -13,15 +13,20 @@
   const KEYWORDS = {
     python: 'def return if elif else for while in import from as class True False None and or not pass break continue try except with lambda',
     java: 'public private protected class extends implements interface abstract static final void int double boolean char long new return if else for while this super null true false try catch',
-    sql: 'SELECT FROM WHERE INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE PRIMARY KEY INT VARCHAR ORDER BY DESC ASC JOIN ON GROUP AS AND OR NOT NULL',
-    bash: 'git init status add commit log switch merge clone pull push diff restore',
+    sql: 'SELECT FROM WHERE INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE PRIMARY KEY FOREIGN REFERENCES INT VARCHAR DECIMAL DATE ORDER BY DESC ASC JOIN ON GROUP HAVING AS AND OR NOT NULL LIKE IN BETWEEN LIMIT',
+    bash: 'git init status add commit log switch merge clone pull push diff restore config remote revert sqlite3 python javac java php pip',
+    js: 'const let var function return if else for while of in new class this null undefined true false async await try catch typeof document console',
+    php: 'echo function return if else elseif foreach for while as new class public private require include isset empty null true false try catch string int float bool array',
     html: 'DOCTYPE html head body meta title link h1 h2 p strong img a header nav main article section footer div span',
     css: 'color background border padding margin display gap justify content align items flex direction media max width box sizing font size solid white black center column',
   };
   const COMMENTS = {
     python: '#[^\\n]*|"""[\\s\\S]*?"""', java: '//[^\\n]*', sql: '--[^\\n]*', bash: '#[^\\n]*',
     html: '<!--[\\s\\S]*?-->', css: '/\\*[\\s\\S]*?\\*/',
+    js: '//[^\\n]*|/\\*[\\s\\S]*?\\*/', php: '//[^\\n]*|/\\*[\\s\\S]*?\\*/',
   };
+  // Textos entre comillas dobles, simples o invertidas (plantillas de JavaScript)
+  const STRINGS = '"(?:[^"\\\\\\n]|\\\\.)*"|\'(?:[^\'\\\\\\n]|\\\\.)*\'|`(?:[^`\\\\]|\\\\.)*`';
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   // `código` → <code>, **texto** → subrayado de rotulador
@@ -29,7 +34,8 @@
 
   function highlight(code, lang) {
     const kw = new Set(KEYWORDS[lang].split(' '));
-    const re = new RegExp(`(${COMMENTS[lang]})|("(?:[^"\\\\\\n]|\\\\.)*"|'(?:[^'\\\\\\n]|\\\\.)*')|(@\\w+|#[0-9a-fA-F]{3,8}\\b)|\\b(\\d+(?:\\.\\d+)?)\\b|\\b([A-Za-z_]\\w*)\\b`, 'g');
+    // Grupos: comentario | texto | anotación, color hex o variable $php | número | palabra
+    const re = new RegExp(`(${COMMENTS[lang]})|(${STRINGS})|(@\\w+|#[0-9a-fA-F]{3,8}\\b|\\$\\w+)|\\b(\\d+(?:\\.\\d+)?)\\b|\\b([A-Za-z_]\\w*)\\b`, 'g');
     let out = '';
     let last = 0;
     let m;
@@ -70,8 +76,11 @@
           `<button class="nb-tab ${x.id === topic.id ? 'active' : ''}" role="tab" aria-selected="${x.id === topic.id}" data-topic="${x.id}" style="--tab:${x.color}">${x.icon} ${esc(x.title[L])}</button>`).join('');
 
         page.style.setProperty('--tab', topic.color);
-        page.innerHTML = `<h2 class="nb-title"><span>${topic.icon}</span> ${esc(topic.title[L])}</h2>` + topic.sections.map((s) => {
-          let html = `<section class="nb-sec"><h3>${inline(s.h[L])}</h3>`;
+        const num = (i) => String(i + 1).padStart(2, '0');
+        const index = `<ol class="nb-index">${topic.sections.map((s, i) =>
+          `<li><button data-goto="${i}"><b>${num(i)}</b> ${inline(s.h[L])}</button></li>`).join('')}</ol>`;
+        page.innerHTML = `<h2 class="nb-title"><span>${topic.icon}</span> ${esc(topic.title[L])}</h2>${index}` + topic.sections.map((s, i) => {
+          let html = `<section class="nb-sec" data-sec="${i}"><h3><span class="nb-num">${num(i)}</span>${inline(s.h[L])}</h3>`;
           if (s.p) html += `<p>${inline(s.p[L])}</p>`;
           if (s.table) {
             const [head, ...rows] = s.table[L];
@@ -104,6 +113,12 @@
         render();
       });
       page.addEventListener('click', (e) => {
+        const go = e.target.closest('[data-goto]');
+        if (go) {
+          const sec = page.querySelector(`[data-sec="${go.dataset.goto}"]`);
+          page.scrollTo({ top: sec.offsetTop - 12, behavior: 'smooth' });
+          return;
+        }
         const b = e.target.closest('.nb-copy');
         if (!b || !navigator.clipboard) return;
         navigator.clipboard.writeText(b.closest('.nb-code').querySelector('code').textContent).then(() => {
