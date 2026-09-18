@@ -64,7 +64,7 @@
     clearInterval(rotate);
     if (!widget.hidden) {
       showQuote();
-      rotate = setInterval(() => { if (!widget.matches(':hover') && !document.hidden) showQuote(quoteIndex + 1); }, 18000);
+      rotate = setInterval(() => { if (!widget.matches(':hover') && !document.hidden) showQuote(quoteIndex + 1); }, 60000);
     }
   }
   widget.querySelector('.w-next').addEventListener('click', () => showQuote(quoteIndex + 1));
