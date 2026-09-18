@@ -579,7 +579,7 @@
 
   // Colocación libre guardada por visitante: { id: { x, y } } en píxeles dentro del escritorio.
   // Hay una para ordenador y otra para móvil, porque la rejilla cambia mucho.
-  const GRID = { x: 10, y: 36, w: 112, h: 98 }; // y deja sitio a los títulos de grupo
+  const GRID = { x: 12, y: 36, w: 120, h: 98 }; // y deja sitio a los títulos de grupo
   const layoutKey = () => `zos-icons-${isMobile() ? 'mobile' : 'desktop'}`;
   const loadLayout = () => { try { return JSON.parse(local.get(layoutKey())); } catch { return null; } };
   const iconEls = () => $$('.d-icon', iconsNav);
@@ -628,7 +628,7 @@
     $$('.d-group', iconsNav).forEach((el) => {
       const l = !saved && def && def.labels.find((x) => x.g === el.dataset.g);
       el.hidden = !l;
-      if (l) el.style.left = `${l.x}px`;
+      if (l) el.style.left = `${l.x - 4}px`; // la etiqueta es 8px más ancha que el icono: se centra
     });
     if (!layout) {
       iconEls().forEach((el) => { el.style.left = ''; el.style.top = ''; });
