@@ -211,6 +211,14 @@ a { color: var(--blue); }
 .icons.free { inset: 0; display: block; pointer-events: none; }
 .icons.free .d-icon { position: absolute; pointer-events: auto; }
 .d-icon.dragging { z-index: 5; opacity: .85; cursor: grabbing; }
+.d-group {
+  position: absolute; top: 8px; width: 104px;
+  padding: 1px 0; text-align: center;
+  background: rgba(29, 26, 63, .45); border-bottom: 2px solid rgba(255, 255, 255, .5);
+  color: #fff; font: 600 13px var(--font-ui); white-space: nowrap;
+  text-shadow: 1px 1px 0 var(--ink);
+  pointer-events: none;
+}
 .d-icon.dragging span { background: var(--blue); text-shadow: none; }
 .d-icon:active svg { filter: drop-shadow(2px 2px 0 rgba(20, 10, 60, .4)) brightness(.8) sepia(.4) hue-rotate(200deg); }
 

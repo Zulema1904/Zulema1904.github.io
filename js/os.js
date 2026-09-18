@@ -344,7 +344,13 @@
     binary: { icon: 'binary', w: 640, mount: (body, ctx) => window.ZApps.binary.mount(body, ctx) },
     notebook: { icon: 'notebook', w: 860, h: 640, mount: (body, ctx) => window.ZApps.notebook.mount(body, ctx) },
   };
-  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'notebook', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact', 'cv', 'trash'];
+  // Escritorio ordenado por grupos (una columna cada uno) y la papelera en su esquina
+  const GROUPS = [
+    ['me', ['about', 'experience', 'projects', 'skills', 'cv', 'contact']],
+    ['tools', ['notebook', 'terminal', 'monitor', 'binary']],
+    ['personal', ['calendar', 'notes', 'games']],
+  ];
+  const DESKTOP_ICONS = [...GROUPS.flatMap(([, ids]) => ids), 'trash'];
   const appCtx = { lang: () => lang, store: local };
   const monitorSrc = () => `monitor/?embed&lang=${lang}`;
 
@@ -540,8 +546,9 @@
   const breakable = (name) => esc(name).replace(/_/g, '_<wbr>').replace(/\.(?=[a-z]+$)/, '<wbr>.');
 
   function renderIcons() {
-    iconsNav.innerHTML = DESKTOP_ICONS.map((id) =>
-      `<button class="d-icon" data-open="${id}" aria-label="${esc(U().apps[id])}">${I[APPS[id].icon]}<span>${breakable(U().apps[id])}</span></button>`).join('');
+    iconsNav.innerHTML = GROUPS.map(([g]) => `<span class="d-group" data-g="${g}" hidden>${esc(U().groups[g])}</span>`).join('')
+      + DESKTOP_ICONS.map((id) =>
+        `<button class="d-icon" data-open="${id}" aria-label="${esc(U().apps[id])}">${I[APPS[id].icon]}<span>${breakable(U().apps[id])}</span></button>`).join('');
     applyLayout();
   }
 
@@ -549,7 +556,7 @@
 
   // Colocación libre guardada por visitante: { id: { x, y } } en píxeles dentro del escritorio.
   // Hay una para ordenador y otra para móvil, porque la rejilla cambia mucho.
-  const GRID = { x: 10, y: 12, w: 112, h: 98 };
+  const GRID = { x: 10, y: 36, w: 112, h: 98 }; // y deja sitio a los títulos de grupo
   const layoutKey = () => `zos-icons-${isMobile() ? 'mobile' : 'desktop'}`;
   const loadLayout = () => { try { return JSON.parse(local.get(layoutKey())); } catch { return null; } };
   const iconEls = () => $$('.d-icon', iconsNav);
@@ -571,9 +578,35 @@
     }
   }
 
+  // Colocación por defecto en ordenador: una columna por grupo (si no cabe, sigue en la de al lado)
+  function defaultLayout() {
+    const a = area();
+    const rows = Math.max(1, Math.floor((a.height - GRID.y - 90) / GRID.h));
+    const layout = {};
+    const labels = [];
+    let col = 0;
+    GROUPS.forEach(([g, ids]) => {
+      labels.push({ g, x: GRID.x + col * GRID.w });
+      ids.forEach((id, i) => {
+        layout[id] = { x: GRID.x + (col + Math.floor(i / rows)) * GRID.w, y: GRID.y + (i % rows) * GRID.h };
+      });
+      col += Math.ceil(ids.length / rows);
+    });
+    // Papelera abajo a la derecha, por encima del suelo por el que pasean los gatos
+    layout.trash = { x: a.width - GRID.w, y: a.height - GRID.h - 90 };
+    return { layout, labels };
+  }
+
   function applyLayout() {
-    const layout = loadLayout();
+    const saved = loadLayout();
+    const def = isMobile() ? null : defaultLayout();
+    const layout = saved || (def && def.layout);
     iconsNav.classList.toggle('free', !!layout);
+    $$('.d-group', iconsNav).forEach((el) => {
+      const l = !saved && def && def.labels.find((x) => x.g === el.dataset.g);
+      el.hidden = !l;
+      if (l) el.style.left = `${l.x}px`;
+    });
     if (!layout) {
       iconEls().forEach((el) => { el.style.left = ''; el.style.top = ''; });
       return;
@@ -612,6 +645,7 @@
     if (other) setIconPos(other, from.x, from.y);
     setIconPos(el, x, y);
     saveLayout();
+    applyLayout(); // ya es una colocación personalizada: se ocultan los títulos de grupo
   }
 
   let suppressClick = false;
