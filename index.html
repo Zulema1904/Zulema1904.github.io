@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zulema Gutiérrez · Desarrolladora Web</title>
+  <meta name="description" content="Portfolio de Zulema Gutiérrez, desarrolladora web y técnica en sistemas. Un sistema operativo retro en tu navegador.">
+  <meta name="theme-color" content="#6a4fd8">
+  <meta property="og:title" content="ZulemaOS · Zulema Gutiérrez">
+  <meta property="og:description" content="Desarrolladora Web · Técnica en Sistemas · IA">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@400;600;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="boot" class="boot" aria-hidden="true">
+    <pre id="boot-log"></pre>
+    <p class="boot-skip"></p>
+  </div>
+
+  <main id="desktop" class="desktop">
+    <h1 class="sr-only">Zulema Gutiérrez — Desarrolladora Web</h1>
+    <div class="wallpaper" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="floor"></div>
+      <div class="wordmark">
+        <span class="wm-title">Zulema<b>OS</b></span>
+        <span class="wm-role" id="wm-role"></span>
+      </div>
+    </div>
+    <nav id="icons" class="icons" aria-label="Escritorio"></nav>
+    <div id="windows" class="windows"></div>
+  </main>
+
+  <div id="start-menu" class="start-menu" hidden></div>
+
+  <footer class="taskbar">
+    <button id="start-btn" class="start-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="start-menu">
+      <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true"><path fill="#6a4fd8" d="M3 3h10v3h-2v1h-1v1H9v1H8v1H7v1h6v2H3v-3h2V9h1V8h1V7h1V6h1V5H3z"/></svg>
+      <span data-i18n="start">Inicio</span>
+    </button>
+    <div id="task-list" class="task-list"></div>
+    <button id="quick-btn" class="quick-btn">
+      <svg viewBox="0 0 32 32" shape-rendering="crispEdges" aria-hidden="true"><path fill="#1d1a3f" d="M17 1h8l-5 11h7L11 31l3-14H7z"/><path fill="#ffd66b" d="M18 2h5l-5 11h7L13 27l2-11H9z"/></svg>
+      <span data-i18n="quick">Modo rápido</span>
+    </button>
+    <div class="tray">
+      <button id="lang-btn" class="tray-btn">EN</button>
+      <time id="clock"></time>
+    </div>
+  </footer>
+
+  <section id="quick" class="quick" hidden aria-labelledby="cv-title"></section>
+  <button id="shutdown" class="shutdown" hidden></button>
+
+  <noscript>
+    <div class="noscript">
+      <h2>Zulema Gutiérrez</h2>
+      <p>Desarrolladora Web · Técnica en Sistemas · IA — Coslada, Madrid</p>
+      <p>Activa JavaScript para usar ZulemaOS, o escríbeme a
+        <a href="mailto:zulema19gutierrez@gmail.com">zulema19gutierrez@gmail.com</a>.</p>
+    </div>
+  </noscript>
+
+  <script src="js/data.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/pets.js"></script>
+  <script src="js/os.js"></script>
+</body>
+</html>

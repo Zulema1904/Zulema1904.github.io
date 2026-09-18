@@ -1,0 +1,7 @@
+# Configuración local del editor / Claude
+.claude/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
