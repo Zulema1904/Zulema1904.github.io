@@ -328,7 +328,7 @@
     trash: { icon: 'trash', w: 460, h: 360, render: R.trash },
     monitor: {
       icon: 'monitor', w: 1000, h: 680, bodyClass: 'frame',
-      mount: (body) => { body.innerHTML = `<iframe class="app-frame" src="${monitorSrc()}" title="ZulemaOS Monitor"></iframe>`; },
+      mount: (body) => { body.innerHTML = `<iframe class="app-frame" src="${monitorSrc()}" title="ZulemaOS Monitor" allow="local-network-access; loopback-network"></iframe>`; },
     },
     calendar: { icon: 'calendar', w: 700, h: 560, render: R.calendar },
   };
