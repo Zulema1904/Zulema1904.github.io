@@ -45,6 +45,7 @@
 
   /* ---------- Plantillas de contenido ---------- */
 
+  const portrait = (cls = '') => `<img class="portrait ${cls}" src="assets/zulema.jpg" alt="${esc(U().portraitAlt)}" width="256" height="256" loading="lazy">`;
   const avatarImg = () => `<img class="avatar-img" src="${window.ZSprites.avatar().src}" alt="" width="32" height="32">`;
   const catIcon = () => `<img src="${window.ZSprites.cat('black', 'sit').src}" alt="">`;
   const chips = (items) => `<ul class="chips">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
@@ -82,7 +83,7 @@
       const l = L();
       return `<div class="about">
         <div class="about-head">
-          <div class="avatar" aria-hidden="true">${avatarImg()}</div>
+          ${portrait('about-portrait')}
           <div>
             <h3>${esc(D.name)}</h3>
             <p class="role">${esc(l.role)}</p>
@@ -721,7 +722,8 @@
     startMenu.innerHTML = `
       <div class="start-banner" aria-hidden="true"><span>Zulema<b>OS</b></span></div>
       <ul class="start-list" role="menu">
-        ${['about', 'experience', 'projects', 'skills', 'notebook', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact']
+        <li class="start-user" role="presentation">${portrait()}<div><b>${esc(D.name)}</b><small>${esc(L().role)}</small></div></li>
+        ${['about', 'experience', 'projects', 'skills', 'notebook', 'terminal', 'monitor', 'binary', 'subnet', 'calendar', 'games', 'notes', 'achievements', 'contact']
           .map((id) => item(`data-open="${id}"`, I[APPS[id].icon], u.apps[id])).join('')}
         <li class="start-sep" role="separator"></li>
         ${item('data-action="feed"', I.bowl, u.pets.feed)}
@@ -794,7 +796,7 @@
       </div>
       <article class="cv">
         <header class="cv-head">
-          <div class="avatar cv-avatar" aria-hidden="true">${avatarImg()}</div>
+          ${portrait('cv-portrait')}
           <div>
           <h1 id="cv-title" tabindex="-1">${esc(D.name)}</h1>
           <p class="cv-role">${esc(l.role)}</p>
