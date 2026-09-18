@@ -1040,7 +1040,9 @@ code {
   color: #fff; font: 700 24px var(--font-ui); letter-spacing: .04em;
 }
 .start-banner b { color: #ffe6a6; }
-.start-menu { max-height: calc(100vh - var(--tb) - 6px); }
+/* Altura máxima fija: aunque se añadan apps, el menú no crece más; el resto se ve con scroll */
+.start-menu { max-height: min(560px, calc(100vh - var(--tb) - 6px)); }
+.start-user { position: sticky; top: -2px; z-index: 1; background: linear-gradient(90deg, #cfc2f3, var(--face)); }
 .start-list { flex: 1; list-style: none; margin: 0; padding: 2px 0 2px 3px; overflow-y: auto; scrollbar-width: thin; }
 .start-item {
   width: 100%;
