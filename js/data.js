@@ -71,8 +71,7 @@ window.PORTFOLIO = {
         org: 'Universidad Carlos III de Madrid',
         points: [
           'Desarrollo de una aplicación de software con inteligencia artificial.',
-          'Programación de scripts y desarrollo de aplicaciones de inteligencia artificial para un Doctorado Industrial.',
-          'Análisis, modelado y propagación de modos de fallo para mejorar la fiabilidad de sistemas electrónicos.',
+          'Programación de scripts y desarrollo de aplicaciones de inteligencia artificial para un Doctorado Industrial en el ámbito del análisis de fallos de sistemas electrónicos.',
         ],
       },
       {
@@ -149,7 +148,7 @@ window.PORTFOLIO = {
         name: 'IA para fiabilidad electrónica',
         kind: 'pro',
         tag: 'Investigación',
-        desc: 'Aplicaciones de IA para analizar y modelar la propagación de modos de fallo en sistemas electrónicos (Doctorado Industrial, UC3M).',
+        desc: 'Aplicaciones de IA para un Doctorado Industrial en el ámbito del análisis de fallos de sistemas electrónicos (UC3M).',
         stack: ['Python', 'IA'],
       },
     ],
@@ -303,8 +302,7 @@ window.PORTFOLIO = {
         org: 'Universidad Carlos III de Madrid',
         points: [
           'Developing an AI-powered software application.',
-          'Scripting and development of artificial intelligence applications for an Industrial PhD.',
-          'Analysis, modelling and propagation of failure modes to improve the reliability of electronic systems.',
+          'Scripting and development of artificial intelligence applications for an Industrial PhD in the field of electronic systems failure analysis.',
         ],
       },
       {
@@ -381,7 +379,7 @@ window.PORTFOLIO = {
         name: 'AI for electronic reliability',
         kind: 'pro',
         tag: 'Research',
-        desc: 'AI applications to analyse and model how failure modes propagate in electronic systems (Industrial PhD, UC3M).',
+        desc: 'AI applications for an Industrial PhD in the field of electronic systems failure analysis (UC3M).',
         stack: ['Python', 'AI'],
       },
     ],
