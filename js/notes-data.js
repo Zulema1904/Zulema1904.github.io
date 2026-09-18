@@ -194,4 +194,226 @@ window.ZNotesData = [
       },
     ],
   },
+  {
+    id: 'sql',
+    icon: '🗃️',
+    color: '#7fe3ff',
+    lang: 'sql',
+    title: { es: 'SQL', en: 'SQL' },
+    sections: [
+      {
+        h: { es: '¿Qué es SQL?', en: 'What is SQL?' },
+        p: {
+          es: 'El lenguaje para hablar con **bases de datos relacionales** (MySQL, PostgreSQL, SQLite…). Los datos se guardan en **tablas**: cada **fila** es un registro y cada **columna**, un dato.',
+          en: 'The language for talking to **relational databases** (MySQL, PostgreSQL, SQLite…). Data lives in **tables**: each **row** is a record and each **column** a field.',
+        },
+        cat: {
+          who: 'hela',
+          es: 'Una tabla es como una hoja de cálculo muy ordenada. Yo ocupo la fila de las siestas.',
+          en: 'A table is like a very tidy spreadsheet. I own the naps row.',
+        },
+      },
+      {
+        h: { es: 'Crear una tabla e insertar datos', en: 'Create a table and insert data' },
+        p: {
+          es: '`CREATE TABLE` define las columnas y su tipo. La **clave primaria** (`PRIMARY KEY`) identifica cada fila sin repetirse.',
+          en: '`CREATE TABLE` defines the columns and their type. The **primary key** (`PRIMARY KEY`) identifies each row and never repeats.',
+        },
+        code: {
+          es: 'CREATE TABLE gatos (\n  id      INT PRIMARY KEY,\n  nombre  VARCHAR(30),\n  color   VARCHAR(20),\n  siestas INT\n);\n\nINSERT INTO gatos (id, nombre, color, siestas)\nVALUES (1, \'Thor\', \'negro\', 5),\n       (2, \'Hela\', \'atigrada\', 9);',
+          en: 'CREATE TABLE cats (\n  id     INT PRIMARY KEY,\n  name   VARCHAR(30),\n  colour VARCHAR(20),\n  naps   INT\n);\n\nINSERT INTO cats (id, name, colour, naps)\nVALUES (1, \'Thor\', \'black\', 5),\n       (2, \'Hela\', \'tabby\', 9);',
+        },
+      },
+      {
+        h: { es: 'Consultar: SELECT', en: 'Querying: SELECT' },
+        p: {
+          es: '`SELECT` elige columnas, `WHERE` filtra filas y `ORDER BY` ordena (`DESC` = de mayor a menor).',
+          en: '`SELECT` picks columns, `WHERE` filters rows and `ORDER BY` sorts (`DESC` = highest first).',
+        },
+        code: {
+          es: 'SELECT nombre, siestas\nFROM gatos\nWHERE siestas > 6\nORDER BY siestas DESC;\n\n-- Resultado: Hela | 9',
+          en: 'SELECT name, naps\nFROM cats\nWHERE naps > 6\nORDER BY naps DESC;\n\n-- Result: Hela | 9',
+        },
+        tip: {
+          es: '`SELECT *` trae todas las columnas: cómodo para explorar, pero en código real mejor nombrar solo las que necesitas.',
+          en: '`SELECT *` brings every column: handy for exploring, but in real code name only the ones you need.',
+        },
+      },
+      {
+        h: { es: 'Modificar y borrar', en: 'Update and delete' },
+        code: {
+          es: 'UPDATE gatos SET siestas = siestas + 1\nWHERE nombre = \'Thor\';\n\nDELETE FROM gatos\nWHERE id = 3;',
+          en: 'UPDATE cats SET naps = naps + 1\nWHERE name = \'Thor\';\n\nDELETE FROM cats\nWHERE id = 3;',
+        },
+        warn: {
+          es: 'Un `UPDATE` o `DELETE` **sin `WHERE`** afecta a **todas** las filas. Revisa siempre el `WHERE` antes de pulsar Enter.',
+          en: 'An `UPDATE` or `DELETE` **without `WHERE`** hits **every** row. Always check the `WHERE` before pressing Enter.',
+        },
+      },
+      {
+        h: { es: 'Unir tablas: JOIN', en: 'Joining tables: JOIN' },
+        p: {
+          es: '`JOIN` combina filas de dos tablas relacionadas por una columna. Con `GROUP BY` y funciones como `COUNT()` se calculan resúmenes.',
+          en: '`JOIN` combines rows from two tables related by a column. With `GROUP BY` and functions like `COUNT()` you build summaries.',
+        },
+        code: {
+          es: 'SELECT g.nombre, COUNT(c.id) AS comidas\nFROM gatos g\nJOIN comidas c ON c.gato_id = g.id\nGROUP BY g.nombre;',
+          en: 'SELECT c.name, COUNT(m.id) AS meals\nFROM cats c\nJOIN meals m ON m.cat_id = c.id\nGROUP BY c.name;',
+        },
+        cat: {
+          who: 'thor',
+          es: 'El `COUNT()` de mis comidas siempre sale bajo. Exijo una auditoría.',
+          en: 'The `COUNT()` of my meals always comes out low. I demand an audit.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'git',
+    icon: '🌿',
+    color: '#9dffb0',
+    lang: 'bash',
+    title: { es: 'Git', en: 'Git' },
+    sections: [
+      {
+        h: { es: '¿Qué es Git?', en: 'What is Git?' },
+        p: {
+          es: 'Un **control de versiones**: guarda "fotos" de tu proyecto (**commits**) para volver atrás, ver qué cambió y trabajar en equipo sin pisarse. **GitHub** es donde se suben los repositorios (¡como este portfolio!).',
+          en: 'A **version control system**: it saves "snapshots" of your project (**commits**) so you can go back, see what changed and work as a team without clashing. **GitHub** is where repositories are hosted (like this portfolio!).',
+        },
+        table: {
+          es: [
+            ['Zona', 'Qué es', 'Se llega con'],
+            ['Carpeta de trabajo', 'Tus archivos tal cual', '(editar)'],
+            ['Área de preparación', 'Lo que irá en el próximo commit', '`git add`'],
+            ['Repositorio', 'El historial de commits', '`git commit`'],
+          ],
+          en: [
+            ['Area', 'What it is', 'You get there with'],
+            ['Working directory', 'Your files as they are', '(editing)'],
+            ['Staging area', 'What goes into the next commit', '`git add`'],
+            ['Repository', 'The commit history', '`git commit`'],
+          ],
+        },
+      },
+      {
+        h: { es: 'Primeros pasos', en: 'First steps' },
+        code: {
+          es: 'git init                  # crea un repositorio\ngit status                # ¿qué ha cambiado?\ngit add index.html        # prepara un archivo\ngit add .                 # …o todos\ngit commit -m "Añade la página de Thor"\ngit log --oneline         # historial resumido',
+          en: 'git init                  # create a repository\ngit status                # what has changed?\ngit add index.html        # stage one file\ngit add .                 # …or all of them\ngit commit -m "Add Thor\'s page"\ngit log --oneline         # short history',
+        },
+        tip: {
+          es: 'Mensajes de commit cortos y en imperativo: "Añade el comedero", "Corrige el botón de copiar". Tu yo del futuro lo agradecerá.',
+          en: 'Keep commit messages short and in the imperative: "Add the food bowl", "Fix the copy button". Future you will be grateful.',
+        },
+      },
+      {
+        h: { es: 'Ramas', en: 'Branches' },
+        p: {
+          es: 'Una **rama** es una línea de trabajo paralela: pruebas algo nuevo sin romper la rama principal (`main`) y, cuando funciona, lo **fusionas**.',
+          en: 'A **branch** is a parallel line of work: you try something new without breaking the main branch (`main`) and **merge** it once it works.',
+        },
+        code: {
+          es: 'git switch -c comedero    # crea la rama y se cambia a ella\n# ...cambios y commits...\ngit switch main           # vuelve a main\ngit merge comedero        # une los cambios',
+          en: 'git switch -c food-bowl   # create the branch and switch to it\n# ...changes and commits...\ngit switch main           # back to main\ngit merge food-bowl       # bring the changes in',
+        },
+        cat: {
+          who: 'hela',
+          es: 'Una rama es como probar un sitio nuevo para la siesta sin renunciar al sofá.',
+          en: 'A branch is like trying a new napping spot without giving up the sofa.',
+        },
+      },
+      {
+        h: { es: 'Trabajar con GitHub', en: 'Working with GitHub' },
+        code: {
+          es: 'git clone https://github.com/Zulema1904/zulemaos-monitor.git\ngit pull                  # trae los cambios del remoto\ngit push                  # sube tus commits',
+          en: 'git clone https://github.com/Zulema1904/zulemaos-monitor.git\ngit pull                  # fetch changes from the remote\ngit push                  # upload your commits',
+        },
+        warn: {
+          es: '**Nunca** subas contraseñas ni archivos `.env`: lista lo privado en `.gitignore`. Y ojo con `git push --force` en ramas compartidas.',
+          en: '**Never** commit passwords or `.env` files: list private stuff in `.gitignore`. And be careful with `git push --force` on shared branches.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'web',
+    icon: '🎨',
+    color: '#b79cf5',
+    lang: 'html',
+    title: { es: 'HTML / CSS', en: 'HTML / CSS' },
+    sections: [
+      {
+        h: { es: '¿Qué son?', en: 'What are they?' },
+        p: {
+          es: '**HTML** es la estructura y el contenido de una web (el esqueleto). **CSS** es el estilo: colores, tamaños y colocación (la ropa). Y JavaScript pone el comportamiento.',
+          en: '**HTML** is a web page\'s structure and content (the skeleton). **CSS** is the style: colours, sizes and layout (the clothes). And JavaScript adds behaviour.',
+        },
+        cat: {
+          who: 'thor',
+          es: 'HTML es mi esqueleto, CSS es mi pelaje negro brillante. Yo soy 100 % estilo.',
+          en: 'HTML is my skeleton, CSS is my shiny black fur. I am 100 % style.',
+        },
+      },
+      {
+        h: { es: 'Estructura básica de HTML', en: 'Basic HTML structure' },
+        p: {
+          es: 'Todo son **etiquetas** que abren y cierran (`<p>…</p>`). El `<head>` tiene información para el navegador y el `<body>`, lo que se ve.',
+          en: 'Everything is **tags** that open and close (`<p>…</p>`). The `<head>` holds info for the browser and the `<body>`, what you see.',
+        },
+        code: {
+          es: '<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <title>Mis gatos</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <h1>Thor y Hela</h1>\n  <p>Dos gatos y <strong>muchas</strong> siestas.</p>\n  <img src="thor.png" alt="Thor, un gato negro">\n  <a href="https://zulema1904.github.io">Mi portfolio</a>\n</body>\n</html>',
+          en: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>My cats</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <h1>Thor and Hela</h1>\n  <p>Two cats and <strong>lots of</strong> naps.</p>\n  <img src="thor.png" alt="Thor, a black cat">\n  <a href="https://zulema1904.github.io">My portfolio</a>\n</body>\n</html>',
+        },
+        warn: {
+          es: 'Todas las imágenes necesitan `alt`: es lo que leen los lectores de pantalla y lo que se ve si la imagen no carga.',
+          en: 'Every image needs `alt`: it is what screen readers read out and what shows if the image fails to load.',
+        },
+      },
+      {
+        h: { es: 'Etiquetas semánticas', en: 'Semantic tags' },
+        p: {
+          es: 'En vez de poner `<div>` para todo, usa etiquetas con significado: mejoran la **accesibilidad** y el **SEO**.',
+          en: 'Instead of `<div>` for everything, use tags with meaning: they improve **accessibility** and **SEO**.',
+        },
+        code: {
+          es: '<header>Logo y título</header>\n<nav>Menú</nav>\n<main>\n  <article>\n    <h2>Cómo dormir 16 horas</h2>\n  </article>\n</main>\n<footer>© Hela</footer>',
+          en: '<header>Logo and title</header>\n<nav>Menu</nav>\n<main>\n  <article>\n    <h2>How to sleep 16 hours</h2>\n  </article>\n</main>\n<footer>© Hela</footer>',
+        },
+      },
+      {
+        h: { es: 'CSS: selectores y caja', en: 'CSS: selectors and the box' },
+        p: {
+          es: 'Una regla CSS es **selector { propiedad: valor; }**. Se puede seleccionar por etiqueta, por **clase** (`.gato`) o por **id** (`#thor`). Cada elemento es una **caja**: contenido + `padding` + `border` + `margin`.',
+          en: 'A CSS rule is **selector { property: value; }**. You can select by tag, by **class** (`.cat`) or by **id** (`#thor`). Every element is a **box**: content + `padding` + `border` + `margin`.',
+        },
+        lang: 'css',
+        code: {
+          es: '/* etiqueta, clase e id */\nh1 { color: #6a4fd8; }\n\n.gato {\n  border: 2px solid black;\n  padding: 12px;     /* espacio por dentro */\n  margin: 8px;       /* espacio por fuera */\n}\n\n#thor { background: #1d1a3f; color: white; }',
+          en: '/* tag, class and id */\nh1 { color: #6a4fd8; }\n\n.cat {\n  border: 2px solid black;\n  padding: 12px;     /* space inside */\n  margin: 8px;       /* space outside */\n}\n\n#thor { background: #1d1a3f; color: white; }',
+        },
+        tip: {
+          es: 'Empieza tus hojas con `* { box-sizing: border-box; }`: así el ancho incluye el `padding` y el `border`, y las cuentas salen.',
+          en: 'Start your stylesheets with `* { box-sizing: border-box; }`: width then includes `padding` and `border`, and the maths works out.',
+        },
+      },
+      {
+        h: { es: 'Flexbox y diseño adaptable', en: 'Flexbox and responsive design' },
+        p: {
+          es: '`display: flex` coloca los hijos en fila (o columna) y reparte el espacio. Con `@media` cambias el diseño según el ancho de la pantalla.',
+          en: '`display: flex` lays children out in a row (or column) and shares the space. With `@media` you change the layout depending on screen width.',
+        },
+        lang: 'css',
+        code: {
+          es: '.gatos {\n  display: flex;\n  gap: 16px;\n  justify-content: center;   /* eje principal */\n  align-items: center;       /* eje cruzado */\n}\n\n@media (max-width: 600px) {\n  .gatos { flex-direction: column; }   /* en móvil, uno debajo de otro */\n}',
+          en: '.cats {\n  display: flex;\n  gap: 16px;\n  justify-content: center;   /* main axis */\n  align-items: center;       /* cross axis */\n}\n\n@media (max-width: 600px) {\n  .cats { flex-direction: column; }   /* on mobile, stacked */\n}',
+        },
+        cat: {
+          who: 'hela',
+          es: 'Flexbox es como nosotros en el sofá: en fila, con `gap` justo para no molestarnos.',
+          en: 'Flexbox is like us on the sofa: in a row, with just enough `gap` not to bother each other.',
+        },
+      },
+    ],
+  },
 ];

@@ -13,6 +13,14 @@
   const KEYWORDS = {
     python: 'def return if elif else for while in import from as class True False None and or not pass break continue try except with lambda',
     java: 'public private protected class extends implements interface abstract static final void int double boolean char long new return if else for while this super null true false try catch',
+    sql: 'SELECT FROM WHERE INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE PRIMARY KEY INT VARCHAR ORDER BY DESC ASC JOIN ON GROUP AS AND OR NOT NULL',
+    bash: 'git init status add commit log switch merge clone pull push diff restore',
+    html: 'DOCTYPE html head body meta title link h1 h2 p strong img a header nav main article section footer div span',
+    css: 'color background border padding margin display gap justify content align items flex direction media max width box sizing font size solid white black center column',
+  };
+  const COMMENTS = {
+    python: '#[^\\n]*|"""[\\s\\S]*?"""', java: '//[^\\n]*', sql: '--[^\\n]*', bash: '#[^\\n]*',
+    html: '<!--[\\s\\S]*?-->', css: '/\\*[\\s\\S]*?\\*/',
   };
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -21,8 +29,7 @@
 
   function highlight(code, lang) {
     const kw = new Set(KEYWORDS[lang].split(' '));
-    const comment = lang === 'python' ? '#[^\\n]*|"""[\\s\\S]*?"""' : '//[^\\n]*';
-    const re = new RegExp(`(${comment})|("(?:[^"\\\\\\n]|\\\\.)*"|'(?:[^'\\\\\\n]|\\\\.)*')|(@\\w+)|\\b(\\d+(?:\\.\\d+)?)\\b|\\b([A-Za-z_]\\w*)\\b`, 'g');
+    const re = new RegExp(`(${COMMENTS[lang]})|("(?:[^"\\\\\\n]|\\\\.)*"|'(?:[^'\\\\\\n]|\\\\.)*')|(@\\w+|#[0-9a-fA-F]{3,8}\\b)|\\b(\\d+(?:\\.\\d+)?)\\b|\\b([A-Za-z_]\\w*)\\b`, 'g');
     let out = '';
     let last = 0;
     let m;
@@ -37,6 +44,7 @@
       else if (num) cls = 'nu';
       else if (word && kw.has(word)) cls = 'kw';
       else if (word && code[last] === '(') cls = 'fn';
+      else if (word && code[last] === '=') cls = 'an'; // atributos HTML: href=, src=…
       else if (word && lang === 'java' && /^[A-Z]/.test(word)) cls = 'ty';
       out += cls ? `<span class="hl-${cls}">${esc(whole)}</span>` : esc(whole);
     }
@@ -72,8 +80,9 @@
           }
           if (s.code) {
             const code = typeof s.code === 'string' ? s.code : s.code[L];
-            html += `<div class="nb-code"><div class="nb-code-bar"><span>${topic.lang}</span><button class="nb-copy">${esc(t().copy)}</button></div>
-              <pre><code>${highlight(code, topic.lang)}</code></pre></div>`;
+            const lang = s.lang || topic.lang;
+            html += `<div class="nb-code"><div class="nb-code-bar"><span>${lang}</span><button class="nb-copy">${esc(t().copy)}</button></div>
+              <pre><code>${highlight(code, lang)}</code></pre></div>`;
           }
           if (s.tip) html += `<p class="nb-note nb-tip"><b>💡 ${esc(t().tip)}:</b> ${inline(s.tip[L])}</p>`;
           if (s.warn) html += `<p class="nb-note nb-warn"><b>⚠️ ${esc(t().warn)}</b> ${inline(s.warn[L])}</p>`;
