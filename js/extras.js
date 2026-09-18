@@ -143,6 +143,7 @@
 
     saver = { el, resize };
     window.addEventListener('resize', resize);
+    window.ZAch?.unlock('screensaver');
     if (reduced) {
       logo.style.transform = `translate(${W / 2 - logo.offsetWidth / 2}px, ${H / 2 - logo.offsetHeight / 2}px)`;
     } else {
@@ -173,7 +174,7 @@
   window.addEventListener('keydown', (e) => {
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     progress = key === KONAMI[progress] ? progress + 1 : key === KONAMI[0] ? 1 : 0;
-    if (progress === KONAMI.length) { progress = 0; party(); }
+    if (progress === KONAMI.length) { progress = 0; party(); window.ZAch?.unlock('konami'); }
   });
 
   function party() {

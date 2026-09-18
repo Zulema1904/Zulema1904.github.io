@@ -314,6 +314,26 @@
       `<button class="launch" data-open="${id}">${I[APPS[id].icon]}<span>${breakable(U().apps[id])}</span></button>`).join('')}
     </div>`;
 
+  R.achievements = () => {
+    const a = window.ZAch;
+    const u = a.ui();
+    const [n, total] = a.progress();
+    return `<div class="ach-head">
+        <div class="ach-trophy">${I.trophy}</div>
+        <div class="ach-sum"><h3>${esc(u.title)}</h3><p>${esc(u.progress(n, total))}</p>
+          <div class="ach-bar"><i style="width:${(n / total) * 100}%"></i></div></div>
+      </div>
+      <ul class="ach-list">${a.list().map((x) => {
+        const hidden = x.secret && !x.at;
+        return `<li class="${x.at ? 'done' : ''}">
+          <span class="ach-icon">${hidden ? '❔' : x.icon}</span>
+          <div><b>${hidden ? '???' : esc(x.title)}</b><small>${esc(hidden ? u.secret : x.desc)}</small></div>
+          ${x.at ? `<time>${new Date(x.at).toLocaleDateString(locale())}</time>` : ''}
+        </li>`;
+      }).join('')}</ul>
+      <div class="row-end"><span class="muted">${esc(u.local)}</span><button class="btn" data-action="ach-reset">${esc(u.reset)}</button></div>`;
+  };
+
   function repaintCalendar() {
     const w = wins.get('calendar');
     if (w) paintWin(w);
@@ -343,12 +363,14 @@
     notes: { icon: 'notes', w: 560, h: 460, mount: (body, ctx) => window.ZApps.notes.mount(body, ctx) },
     binary: { icon: 'binary', w: 640, mount: (body, ctx) => window.ZApps.binary.mount(body, ctx) },
     notebook: { icon: 'notebook', w: 860, h: 640, mount: (body, ctx) => window.ZApps.notebook.mount(body, ctx) },
+    subnet: { icon: 'subnet', w: 600, mount: (body, ctx) => window.ZApps.subnet.mount(body, ctx) },
+    achievements: { icon: 'trophy', w: 560, h: 600, render: () => R.achievements() },
   };
   // Escritorio ordenado por grupos (una columna cada uno) y la papelera en su esquina
   const GROUPS = [
     ['me', ['about', 'experience', 'projects', 'skills', 'cv', 'contact']],
-    ['tools', ['notebook', 'terminal', 'monitor', 'binary']],
-    ['personal', ['calendar', 'notes', 'games']],
+    ['tools', ['notebook', 'terminal', 'monitor', 'binary', 'subnet']],
+    ['personal', ['calendar', 'notes', 'games', 'achievements']],
   ];
   const DESKTOP_ICONS = [...GROUPS.flatMap(([, ids]) => ids), 'trash'];
   const appCtx = { lang: () => lang, store: local };
@@ -364,6 +386,7 @@
     const app = APPS[id];
     if (!app) return;
     toggleStart(false);
+    if (id !== 'welcome') window.ZAch?.track('apps', id, 10, 'explorer');
     if (app.action) return app.action();
 
     const existing = wins.get(id);
@@ -804,6 +827,7 @@
     quickEl.hidden = false;
     quickEl.scrollTop = 0;
     document.body.classList.add('quick-open');
+    window.ZAch?.unlock('cv');
     if (location.hash !== '#cv') history.replaceState(null, '', '#cv');
     $('#cv-title', quickEl).focus({ preventScroll: true });
   }
@@ -881,6 +905,12 @@
     feed: () => { toggleStart(false); window.ZPets.feed(); renderStart(); },
     'arrange-icons': () => { toggleStart(false); resetIcons(); },
     widget: () => { window.ZExtras.toggleWidget(); renderStart(); },
+    'ach-reset': (btn) => {
+      if (btn.dataset.sure) { window.ZAch.reset(); return; }
+      btn.dataset.sure = '1';
+      btn.textContent = window.ZAch.ui().sure;
+      setTimeout(() => { delete btn.dataset.sure; btn.textContent = window.ZAch.ui().reset; }, 2500);
+    },
     'cal-move': (btn) => {
       const step = Number(btn.dataset.step);
       const now = new Date();
@@ -936,6 +966,11 @@
 
   startBtn.addEventListener('click', () => toggleStart());
   $('#clock-btn').addEventListener('click', () => openApp('calendar'));
+  // Si la ventana de logros está abierta, se actualiza al desbloquear uno
+  window.addEventListener('zos-achievement', () => {
+    const w = wins.get('achievements');
+    if (w) paintWin(w);
+  });
 
   // Los clics dentro de un <iframe> no llegan a esta página: cuando el foco
   // se va a uno, se trae su ventana al frente.

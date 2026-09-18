@@ -134,6 +134,17 @@
       <path fill="#ffd66b" d="M27 6h3v5h-3z"/><path fill="#7fe3ff" d="M27 12h3v5h-3z"/>
       <path fill="#6a4fd8" d="M16 11h8v2h-8z"/>`),
 
+    subnet: svg(`<path fill="${INK}" d="M13 2h6v6h-2v4h8v4h2v5h-6v-5h2v-2H9v2h2v5H5v-5h2v-4h8V8h-2z"/>
+      <path fill="#7fe3ff" d="M14 3h4v4h-4zM6 17h4v3H6zm16 0h4v3h-4z"/>
+      <path fill="${INK}" d="M12 22h8v8h-8z"/><path fill="#ff8fc7" d="M13 23h6v6h-6z"/>
+      <path fill="${INK}" d="M15 16h2v6h-2z"/>`),
+
+    trophy: svg(`<path fill="${INK}" d="M8 3h16v3h5v6h-2v2h-3v2h-2v2h-3v4h4v2h2v5H7v-5h2v-2h4v-4h-3v-2H8v-2H5v-2H3V6h5z"/>
+      <path fill="#ffd66b" d="M9 4h14v9h-2v2h-2v2h-6v-2h-2v-2H9z"/>
+      <path fill="#fff" opacity=".6" d="M11 5h2v7h-2z"/>
+      <path fill="#ffd66b" d="M4 7h4v4H6v1H5V11H4zm20 0h4v4h-1v1h-1v-1h-2z" opacity=".7"/>
+      <path fill="#b79cf5" d="M8 25h16v3H8z"/>`),
+
     quote: svg(`<path fill="${INK}" d="M3 4h26v18H14l-6 6v-6H3z"/>
       <path fill="#fff" d="M4 5h24v16H13l-4 4v-4H4z"/>
       <path fill="#6a4fd8" d="M8 9h4v4h-2v2H8zm8 0h4v4h-2v2h-2z"/>`),

@@ -159,6 +159,8 @@
     }
     bowl.food = 100;
     store.set('zos-meals', String(served() + 1));
+    window.ZAch?.unlock('feed');
+    if (served() >= 5) window.ZAch?.unlock('feed5');
     paintBowl();
     const k = scale();
     pets.forEach((p, i) => {
@@ -257,6 +259,7 @@
   pets.forEach((p) => {
     p.el.addEventListener('click', () => {
       const now = performance.now();
+      window.ZAch?.unlock('pet');
       if (p.mode === 'eat' || p.hungry) { say(p, T().busy); return; }
       const meow = Math.random() < 0.3 ? `${p.cfg.name} ${p.cfg.emoji}` : pick(T().meows);
       say(p, p.mode === 'sleep' ? T().wake : meow);

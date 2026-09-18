@@ -72,6 +72,7 @@
       function render() {
         const L = ctx.lang();
         const topic = topics.find((x) => x.id === current) || topics[0];
+        window.ZAch?.track('topics', topic.id, topics.length, 'notebook');
         tabs.innerHTML = topics.map((x) =>
           `<button class="nb-tab ${x.id === topic.id ? 'active' : ''}" role="tab" aria-selected="${x.id === topic.id}" data-topic="${x.id}" style="--tab:${x.color}">${x.icon} ${esc(x.title[L])}</button>`).join('');
 

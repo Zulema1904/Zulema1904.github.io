@@ -43,6 +43,8 @@
         ['fortune', 'Una frase de programadores (prueba: fortune | catsay)'],
         ['catsay <txt>', 'Un gato ASCII dice lo que quieras'],
         ['bin <número>', 'Convierte a binario, hexadecimal y octal'],
+        ['ipcalc', 'Calculadora de subredes IP 🌐'],
+        ['logros', 'Tus logros en ZulemaOS 🏆'],
         ['screensaver', 'Activa el salvapantallas'],
         ['ls', 'Lista los archivos'],
         ['neofetch', 'Información del sistema'],
@@ -110,6 +112,8 @@
         ['fortune', 'A programmer quote (try: fortune | catsay)'],
         ['catsay <txt>', 'An ASCII cat says whatever you want'],
         ['bin <number>', 'Convert to binary, hexadecimal and octal'],
+        ['ipcalc', 'IP subnet calculator 🌐'],
+        ['achievements', 'Your ZulemaOS achievements 🏆'],
         ['screensaver', 'Start the screensaver'],
         ['ls', 'List files'],
         ['neofetch', 'System information'],
@@ -345,7 +349,7 @@
       date() { print(esc(new Date().toLocaleString(lang() === 'es' ? 'es-ES' : 'en-GB'))); },
       echo(args) { print(esc(args.join(' '))); },
       history() { history.forEach((h, i) => print(`${String(i + 1).padStart(4, ' ')}  ${esc(h)}`)); },
-      sudo() { print(S().sudo); },
+      sudo() { print(S().sudo); window.ZAch?.unlock('sudo'); },
       rm() { print(S().rm); },
       hola() { print(S().hello); },
       cats(args) {
@@ -393,6 +397,7 @@
       },
       vim() {
         print(S().vim);
+        window.ZAch?.unlock('vim');
         ctx.openApp('notes');
       },
       feed() {
@@ -470,6 +475,8 @@
       games: commands.juegos, notes: commands.notas, nano: commands.notas, vi: commands.vim, comida: commands.feed,
       sudoku: () => ctx.openApp('sudoku'), tetris: () => ctx.openApp('tetris'),
       sopa: () => ctx.openApp('wordsearch'), wordsearch: () => ctx.openApp('wordsearch'),
+      ipcalc: () => ctx.openApp('subnet'), subredes: () => ctx.openApp('subnet'), subnet: () => ctx.openApp('subnet'),
+      logros: () => ctx.openApp('achievements'), achievements: () => ctx.openApp('achievements'),
       binario: commands.bin, binary: commands.bin, xscreensaver: commands.screensaver, cowsay: commands.catsay,
     });
 
@@ -479,10 +486,12 @@
       if (!line) return;
       history.push(line);
       hIndex = history.length;
+      window.ZAch?.count('commands', 15, 'terminal');
       // Tubería favorita de cualquier sysadmin
       if (/^fortune\s*\|\s*(catsay|cowsay)$/i.test(line)) {
         const [q, a] = window.ZExtras.fortune();
         commands.catsay([], `${q} — ${a}`);
+        window.ZAch?.unlock('fortune');
         body.scrollTop = body.scrollHeight;
         return;
       }

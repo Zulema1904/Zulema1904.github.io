@@ -152,6 +152,7 @@
         $('.tt-lines').textContent = lines;
         $('.tt-level').textContent = level;
         $('.tt-best').textContent = best;
+        if (score >= 1000) window.ZAch?.unlock('tetris1000');
       }
 
       function lock() {
@@ -172,7 +173,7 @@
           score += POINTS[cleared] * level;
           lines += cleared;
           level = Math.floor(lines / 10) + 1;
-          if (cleared === 4) { flash = t().tetris; flashUntil = performance.now() + 1200; }
+          if (cleared === 4) { flash = t().tetris; flashUntil = performance.now() + 1200; window.ZAch?.unlock('tetris'); }
         }
         piece = spawn(next);
         next = takeFromBag();

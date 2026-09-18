@@ -47,6 +47,7 @@
 
       function paint(except) {
         $('.bin-dec-big').textContent = value.toLocaleString(ctx.lang() === 'es' ? 'es-ES' : 'en-GB');
+        if (value === max()) window.ZAch?.unlock('binary');
         body.querySelectorAll('.bin-size').forEach((b) => b.classList.toggle('pressed', Number(b.dataset.bits) === bits));
 
         const leds = [];

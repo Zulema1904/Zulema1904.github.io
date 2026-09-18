@@ -141,6 +141,7 @@
         if (found.size === game.words.length) {
           done = true;
           $('.game-msg').textContent = t().win(fmt(Math.round((Date.now() - started) / 1000)));
+          window.ZAch?.unlock('wordsearch');
         }
       }
 

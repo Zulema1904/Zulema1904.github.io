@@ -192,6 +192,8 @@
           if (!best || secs < best) ctx.store.set(key, String(secs));
           msg.textContent = t().win(fmt(secs));
           grid.classList.add('won');
+          window.ZAch?.unlock('sudoku');
+          if (level === 'hard') window.ZAch?.unlock('sudoku_hard');
         }
       }
 
