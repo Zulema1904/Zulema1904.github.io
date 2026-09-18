@@ -341,8 +341,9 @@
     wordsearch: { icon: 'wordsearch', w: 720, h: 650, mount: (body, ctx) => window.ZApps.wordsearch.mount(body, ctx) },
     tetris: { icon: 'tetris', w: 470, h: 640, mount: (body, ctx) => window.ZApps.tetris.mount(body, ctx) },
     notes: { icon: 'notes', w: 560, h: 460, mount: (body, ctx) => window.ZApps.notes.mount(body, ctx) },
+    binary: { icon: 'binary', w: 640, mount: (body, ctx) => window.ZApps.binary.mount(body, ctx) },
   };
-  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'contact', 'cv', 'trash'];
+  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact', 'cv', 'trash'];
   const appCtx = { lang: () => lang, store: local };
   const monitorSrc = () => `monitor/?embed&lang=${lang}`;
 
@@ -656,11 +657,12 @@
     startMenu.innerHTML = `
       <div class="start-banner" aria-hidden="true"><span>Zulema<b>OS</b></span></div>
       <ul class="start-list" role="menu">
-        ${['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'contact']
+        ${['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact']
           .map((id) => item(`data-open="${id}"`, I[APPS[id].icon], u.apps[id])).join('')}
         <li class="start-sep" role="separator"></li>
         ${item('data-action="feed"', I.bowl, u.pets.feed)}
         ${item('data-action="arrange-icons"', I.folderLilac, u.arrange)}
+        ${item('data-action="widget"', I.quote, window.ZExtras.widgetEnabled() ? u.widget.on : u.widget.off)}
         ${item('data-action="quick"', I.zap, u.quick)}
         ${item('data-open="welcome"', I.info, u.readme)}
         ${item('data-action="lang"', I.globe, u.langName)}
@@ -701,6 +703,7 @@
     renderIcons();
     renderStart();
     wins.forEach(paintWin);
+    window.ZExtras.setLang();
     const monitorFrame = wins.get('monitor') && $('iframe', wins.get('monitor').body);
     if (monitorFrame) monitorFrame.src = monitorSrc();
     if (!quickEl.hidden) quickEl.innerHTML = renderQuick();
@@ -836,6 +839,7 @@
     pets: () => { window.ZPets.toggle(); renderStart(); },
     feed: () => { toggleStart(false); window.ZPets.feed(); renderStart(); },
     'arrange-icons': () => { toggleStart(false); resetIcons(); },
+    widget: () => { window.ZExtras.toggleWidget(); renderStart(); },
     'cal-move': (btn) => {
       const step = Number(btn.dataset.step);
       const now = new Date();
@@ -923,6 +927,7 @@
   renderStart();
   updateClock();
   setInterval(updateClock, 15000);
+  window.ZExtras.setLang();
 
   // El avatar parpadea de vez en cuando
   if (!reducedMotion) {

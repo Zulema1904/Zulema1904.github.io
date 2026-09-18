@@ -15,10 +15,10 @@
 
   // Archivos "visibles" con ls / open / cat
   const FILES = {
-    es: { 'sobre_mi.txt': 'about', 'experiencia/': 'experience', 'proyectos/': 'projects', 'habilidades.exe': 'skills', 'monitor.exe': 'monitor', 'calendario.exe': 'calendar', 'juegos/': 'games', 'notas.txt': 'notes', 'contacto.exe': 'contact', 'cv.pdf': 'cv', 'papelera/': 'trash' },
-    en: { 'about_me.txt': 'about', 'experience/': 'experience', 'projects/': 'projects', 'skills.exe': 'skills', 'monitor.exe': 'monitor', 'calendar.exe': 'calendar', 'games/': 'games', 'notes.txt': 'notes', 'contact.exe': 'contact', 'cv.pdf': 'cv', 'trash/': 'trash' },
+    es: { 'sobre_mi.txt': 'about', 'experiencia/': 'experience', 'proyectos/': 'projects', 'habilidades.exe': 'skills', 'monitor.exe': 'monitor', 'calendario.exe': 'calendar', 'juegos/': 'games', 'notas.txt': 'notes', 'binario.exe': 'binary', 'contacto.exe': 'contact', 'cv.pdf': 'cv', 'papelera/': 'trash' },
+    en: { 'about_me.txt': 'about', 'experience/': 'experience', 'projects/': 'projects', 'skills.exe': 'skills', 'monitor.exe': 'monitor', 'calendar.exe': 'calendar', 'games/': 'games', 'notes.txt': 'notes', 'binary.exe': 'binary', 'contact.exe': 'contact', 'cv.pdf': 'cv', 'trash/': 'trash' },
   };
-  const APP_IDS = ['about', 'experience', 'projects', 'skills', 'monitor', 'calendar', 'games', 'sudoku', 'wordsearch', 'tetris', 'notes', 'contact', 'cv', 'trash', 'welcome', 'terminal'];
+  const APP_IDS = ['about', 'experience', 'projects', 'skills', 'monitor', 'calendar', 'games', 'sudoku', 'wordsearch', 'tetris', 'notes', 'binary', 'contact', 'cv', 'trash', 'welcome', 'terminal'];
 
   const STR = {
     es: {
@@ -39,6 +39,10 @@
         ['juegos', 'Sudoku, sopa de letras y Tetris 🎮'],
         ['notas', 'Bloc de notas'],
         ['feed', 'Dar de comer a Thor y Hela 🐟'],
+        ['fortune', 'Una frase de programadores (prueba: fortune | catsay)'],
+        ['catsay <txt>', 'Un gato ASCII dice lo que quieras'],
+        ['bin <número>', 'Convierte a binario, hexadecimal y octal'],
+        ['screensaver', 'Activa el salvapantallas'],
         ['ls', 'Lista los archivos'],
         ['neofetch', 'Información del sistema'],
         ['ping zulema', '¿Estoy disponible?'],
@@ -76,6 +80,9 @@
       catsOn: '¡Han vuelto los gatos! 🐾',
       calHint: 'Versión con festivos y citas: open calendario',
       vim: 'Para salir de vim escribe :q!… Tranqui, que abro el bloc de notas 😅',
+      catsayDefault: '¡Miau! Escribe: catsay tu mensaje',
+      binBad: 'Uso: bin 42 · bin 0b1010 · bin 0xFF (enteros de 0 a 4294967295)',
+      konami: '↑ ↑ ↓ ↓ ← → ← → B A … pruébalo fuera de la terminal 😉',
       fed: (n) => `🐟 Comedero lleno. Thor y Hela van corriendo… (${n} comidas servidas)`,
       thor: '⚡ Thor ha tirado tu taza de la mesa. Mirándote. Sin remordimientos.',
       hela: '👑 Hela te ha mirado, ha bostezado y ha seguido durmiendo. Es un honor.',
@@ -98,6 +105,10 @@
         ['games', 'Sudoku, word search and Tetris 🎮'],
         ['notes', 'Notepad'],
         ['feed', 'Feed Thor and Hela 🐟'],
+        ['fortune', 'A programmer quote (try: fortune | catsay)'],
+        ['catsay <txt>', 'An ASCII cat says whatever you want'],
+        ['bin <number>', 'Convert to binary, hexadecimal and octal'],
+        ['screensaver', 'Start the screensaver'],
         ['ls', 'List files'],
         ['neofetch', 'System information'],
         ['ping zulema', 'Am I available?'],
@@ -135,6 +146,9 @@
       catsOn: 'The cats are back! 🐾',
       calHint: 'Full version with holidays and meetings: open calendar',
       vim: 'To exit vim type :q!… Relax, I\'ll open the notepad instead 😅',
+      catsayDefault: 'Meow! Type: catsay your message',
+      binBad: 'Usage: bin 42 · bin 0b1010 · bin 0xFF (integers from 0 to 4294967295)',
+      konami: '↑ ↑ ↓ ↓ ← → ← → B A … try it outside the terminal 😉',
       fed: (n) => `🐟 Bowl filled. Thor and Hela are running over… (${n} meals served)`,
       thor: '⚡ Thor just knocked your mug off the desk. Staring at you. No regrets.',
       hela: '👑 Hela looked at you, yawned and went back to sleep. You should feel honoured.',
@@ -383,6 +397,49 @@
         window.ZPets.feed();
         print(S().fed(window.ZPets.meals()));
       },
+      fortune() {
+        const [q, a] = window.ZExtras.fortune();
+        print(`<span class="c-lil">“${esc(q)}”</span>`);
+        print(dim(`   — ${a}`));
+      },
+      catsay(args, text) {
+        const msg = (text || args.join(' ') || S().catsayDefault).trim();
+        const lines = [];
+        msg.split(/\s+/).forEach((word) => {
+          const last = lines[lines.length - 1];
+          if (last !== undefined && (`${last} ${word}`).length <= 34) lines[lines.length - 1] = `${last} ${word}`;
+          else lines.push(word);
+        });
+        const w = Math.max(...lines.map((l) => l.length));
+        const bubble = lines.length === 1
+          ? [`< ${lines[0]} >`]
+          : lines.map((l, i) => {
+            const [a, b] = i === 0 ? ['/', '\\'] : i === lines.length - 1 ? ['\\', '/'] : ['|', '|'];
+            return `${a} ${l.padEnd(w)} ${b}`;
+          });
+        const thor = Math.random() < 0.5;
+        const cat = [
+          '        \\    /\\_/\\',
+          `         \\  ( ${thor ? 'o.o' : '-.-'} )`,
+          `             > ${thor ? '^' : '~'} <`,
+          '            /     \\',
+          `           (  | |  )   ${thor ? '⚡ Thor' : '👑 Hela'}`,
+        ];
+        print(`<span class="catsay">${esc([` ${'_'.repeat(w + 2)}`, ...bubble, ` ${'-'.repeat(w + 2)}`, ...cat].join('\n'))}</span>`);
+      },
+      bin(args) {
+        if (!args[0]) { ctx.openApp('binary'); return; }
+        const raw = args[0].toLowerCase();
+        const n = raw.startsWith('0b') ? parseInt(raw.slice(2), 2) : raw.startsWith('0x') ? parseInt(raw.slice(2), 16) : Number(raw);
+        if (!Number.isInteger(n) || n < 0 || n > 0xFFFFFFFF) return print(S().binBad);
+        const bin = n.toString(2);
+        print(`<span class="c-acc">DEC</span> ${n}`);
+        print(`<span class="c-acc">BIN</span> ${bin.padStart(Math.ceil(bin.length / 8) * 8, '0').replace(/(.{4})(?=.)/g, '$1 ')}`);
+        print(`<span class="c-acc">HEX</span> 0x${n.toString(16).toUpperCase()}`);
+        print(`<span class="c-acc">OCT</span> 0o${n.toString(8)}`);
+      },
+      screensaver() { window.ZExtras.screensaver(); },
+      konami() { print(S().konami); },
       thor() { print(S().thor); },
       hela() { print(S().hela); },
       meow() {
@@ -401,6 +458,7 @@
       games: commands.juegos, notes: commands.notas, nano: commands.notas, vi: commands.vim, comida: commands.feed,
       sudoku: () => ctx.openApp('sudoku'), tetris: () => ctx.openApp('tetris'),
       sopa: () => ctx.openApp('wordsearch'), wordsearch: () => ctx.openApp('wordsearch'),
+      binario: commands.bin, binary: commands.bin, xscreensaver: commands.screensaver, cowsay: commands.catsay,
     });
 
     const run = async (raw) => {
@@ -409,6 +467,13 @@
       if (!line) return;
       history.push(line);
       hIndex = history.length;
+      // Tubería favorita de cualquier sysadmin
+      if (/^fortune\s*\|\s*(catsay|cowsay)$/i.test(line)) {
+        const [q, a] = window.ZExtras.fortune();
+        commands.catsay([], `${q} — ${a}`);
+        body.scrollTop = body.scrollHeight;
+        return;
+      }
       const [cmd, ...args] = line.split(/\s+/);
       const fn = commands[cmd.toLowerCase()];
       if (fn) await fn(args);

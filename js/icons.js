@@ -117,6 +117,18 @@
       <path fill="#ff8fc7" d="M4 17h24v2H4zm2 2h20v2H6zm3 2h14v2H9z"/>
       <path fill="#ffd1e8" d="M4 17h3v1H4z"/>`),
 
+    binary: svg(`<path fill="${INK}" d="M2 6h28v20H2z"/>
+      <path fill="#120f2e" d="M3 7h26v18H3z"/>
+      <path fill="#9dffb0" d="M5 10h2v5H5zm12 0h3v1h-1v4h-1v-4h-1zm8 0h2v5h-2z"/>
+      <path fill="#9dffb0" d="M9 10h4v5H9zm1 1v3h2v-3z" fill-rule="evenodd"/>
+      <path fill="#b79cf5" d="M5 18h4v4H5zm12 0h4v4h-4z"/>
+      <path fill="#3a3470" d="M11 18h4v4h-4zm12 0h4v4h-4z"/>
+      <path fill="#fff" d="M6 19h1v1H6zm12 0h1v1h-1z"/>`),
+
+    quote: svg(`<path fill="${INK}" d="M3 4h26v18H14l-6 6v-6H3z"/>
+      <path fill="#fff" d="M4 5h24v16H13l-4 4v-4H4z"/>
+      <path fill="#6a4fd8" d="M8 9h4v4h-2v2H8zm8 0h4v4h-2v2h-2z"/>`),
+
     // Botones de la barra de título
     btnMin: '<svg viewBox="0 0 8 8" aria-hidden="true"><path fill="currentColor" d="M1 6h6v2H1z"/></svg>',
     btnMax: '<svg viewBox="0 0 8 8" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 0h8v8H0zM1 2v5h6V2z"/></svg>',

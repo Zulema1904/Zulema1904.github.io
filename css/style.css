@@ -637,6 +637,83 @@ code {
   font: 12.5px var(--font-ui); color: var(--muted);
 }
 
+/* Binario.exe */
+.bin-label { font: 14px var(--font-ui); }
+.bin-size.pressed { background: var(--accent); color: #fff; }
+.bin-leds {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 3px;
+  padding: 12px 8px; background: var(--term-bg); border: 2px solid var(--dk);
+}
+.led { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0; background: none; border: 0; cursor: pointer; }
+.led i {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #2b2566; border: 2px solid #3a3470;
+  transition: background .15s, box-shadow .15s;
+}
+.led.on i { background: #d9c8ff; border-color: #fff; box-shadow: 0 0 10px 3px var(--accent), 0 0 3px #fff inset; }
+.led small { font: 11px var(--font-term); color: var(--term-dim); }
+.led-gap { width: 10px; }
+.bin-ops { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.bin-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
+.bin-fields label { display: flex; flex-direction: column; gap: 2px; font: 13px var(--font-ui); color: var(--muted); }
+.bin-in {
+  padding: 5px 8px; font: 15px var(--font-mono); color: var(--ink);
+  background: #fff; border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.bin-in.bad { background: #ffe0ec; color: #b3265a; }
+.bin-extra { margin: 0; text-align: center; font-size: 14px; }
+.bin-extra b { font: 20px var(--font-term); color: var(--accent); }
+.bin-hint { margin: 0; text-align: center; font-size: 12px; }
+
+/* Gato ASCII de la terminal */
+.catsay { display: block; white-space: pre; color: #e9dcff; }
+
+/* Widget de frases */
+.widget {
+  position: absolute; top: 16px; right: 16px; z-index: 2;
+  width: 300px;
+  background: #fff; border: 2px solid var(--dk);
+  box-shadow: 5px 5px 0 rgba(29, 20, 80, .35);
+}
+.widget-bar {
+  display: flex; justify-content: space-between; align-items: center; gap: 6px;
+  padding: 3px 4px 3px 8px;
+  background: linear-gradient(90deg, var(--pink), var(--title-b));
+  color: #fff; font: 600 13px var(--font-ui);
+}
+.w-btn { width: 22px; height: 20px; padding: 0; margin-left: 2px; background: var(--face); border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi); color: var(--ink); font-size: 11px; cursor: pointer; }
+.widget blockquote { margin: 0; padding: 12px 14px 10px; }
+.w-text { min-height: 3.6em; margin: 0 0 6px; font: 19px/1.25 var(--font-term); color: var(--ink); }
+.w-text.typing::after { content: '▌'; color: var(--accent); animation: blink .8s steps(2) infinite; }
+.w-author { font-size: 12px; color: var(--muted); text-align: right; }
+@media (max-width: 720px) { .widget { display: none; } }
+
+/* Salvapantallas */
+.saver { position: fixed; inset: 0; z-index: 7000; background: #0b0920; cursor: none; overflow: hidden; }
+.saver canvas { position: absolute; inset: 0; }
+.saver-logo {
+  position: absolute; left: 0; top: 0;
+  font: 700 clamp(36px, 6vw, 72px)/1 var(--font-ui);
+  text-shadow: 3px 3px 0 var(--dk), 0 0 24px currentColor;
+  transition: color .3s;
+}
+.saver-logo b { color: #fff; }
+.saver-cats { position: absolute; left: 0; right: 0; bottom: 24px; height: 80px; }
+.saver-cats img { position: absolute; bottom: 0; left: 0; image-rendering: pixelated; }
+.saver-hint { position: absolute; left: 0; right: 0; bottom: 4px; margin: 0; text-align: center; color: #6b62a0; font: 16px var(--font-term); }
+
+/* Lluvia del código Konami */
+.rain { position: fixed; inset: 0; z-index: 6500; pointer-events: none; overflow: hidden; }
+.rain span, .rain img { position: absolute; top: -60px; animation: fall linear forwards; image-rendering: pixelated; }
+.rain-title {
+  position: absolute; top: 30%; left: 0; right: 0; margin: 0; text-align: center;
+  font: 700 clamp(28px, 5vw, 56px) var(--font-ui); color: var(--yellow);
+  text-shadow: 3px 3px 0 var(--dk), 0 0 20px var(--pink);
+  animation: pop .4s ease-out, fade 6s forwards;
+}
+@keyframes fall { to { transform: translateY(calc(100vh + 120px)) rotate(360deg); } }
+@keyframes fade { 80% { opacity: 1; } 100% { opacity: 0; } }
+
 /* Habilidades */
 .sysinfo { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; }
 .sysinfo > svg { flex: none; width: 64px; height: 64px; }

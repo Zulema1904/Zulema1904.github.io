@@ -34,6 +34,44 @@ window.PORTFOLIO = {
     ],
   },
 
+  // Frases del widget del escritorio y del comando "fortune": [texto, autor]
+  quotes: {
+    es: [
+      ['Hay 10 tipos de personas: las que entienden binario y las que no.', 'Chiste clásico'],
+      ['Funciona en mi máquina.', 'Todo desarrollador, alguna vez'],
+      ['Primero resuelve el problema. Después, escribe el código.', 'John Johnson'],
+      ['La optimización prematura es la raíz de todos los males.', 'Donald Knuth'],
+      ['Hablar es barato. Enséñame el código.', 'Linus Torvalds'],
+      ['Simple es mejor que complejo.', 'El Zen de Python'],
+      ['El código se lee muchas más veces de las que se escribe.', 'PEP 8'],
+      ['¿Has probado a apagarlo y volverlo a encender?', 'Soporte técnico (guiño a SMR)'],
+      ['Un bug es solo una funcionalidad sin documentar.', 'Folclore programador'],
+      ['La mejor manera de predecir el futuro es inventarlo.', 'Alan Kay'],
+      ['Todo es un archivo.', 'Filosofía Unix'],
+      ['git commit -m "arreglado" … no lo estaba.', 'Historia real'],
+      ['El café entra, el código sale. ☕', 'Anónimo'],
+      ['Los gatos llevan siglos practicando sleep(). Thor lo domina.', 'Hela 👑'],
+      ['Si depurar es quitar bugs, programar es ponerlos.', 'Folclore programador'],
+    ],
+    en: [
+      ['There are 10 kinds of people: those who understand binary and those who don\'t.', 'Classic joke'],
+      ['It works on my machine.', 'Every developer, at some point'],
+      ['First, solve the problem. Then, write the code.', 'John Johnson'],
+      ['Premature optimization is the root of all evil.', 'Donald Knuth'],
+      ['Talk is cheap. Show me the code.', 'Linus Torvalds'],
+      ['Simple is better than complex.', 'The Zen of Python'],
+      ['Code is read much more often than it is written.', 'PEP 8'],
+      ['Have you tried turning it off and on again?', 'IT support'],
+      ['A bug is just an undocumented feature.', 'Programmer folklore'],
+      ['The best way to predict the future is to invent it.', 'Alan Kay'],
+      ['Everything is a file.', 'Unix philosophy'],
+      ['git commit -m "fixed" … it wasn\'t.', 'True story'],
+      ['Coffee in, code out. ☕', 'Anonymous'],
+      ['Cats have practised sleep() for centuries. Thor has mastered it.', 'Hela 👑'],
+      ['If debugging is removing bugs, programming is putting them in.', 'Programmer folklore'],
+    ],
+  },
+
   // Mascotas de escritorio (sprite: 'black' | 'tabby')
   pets: [
     {
@@ -191,9 +229,13 @@ window.PORTFOLIO = {
         wordsearch: 'Sopa_de_letras.exe',
         tetris: 'Tetris.exe',
         notes: 'Notas.txt',
+        binary: 'Binario.exe',
       },
       openApp: 'Abrir',
       arrange: 'Ordenar iconos',
+      widget: { title: 'frase_del_dia.txt', next: 'Otra frase', close: 'Ocultar', on: 'Frases: sí', off: 'Frases: no' },
+      saver: 'Pulsa cualquier tecla o mueve el ratón',
+      konami: '¡Código Konami! 🎮',
       code: 'Código',
       cal: {
         today: 'Hoy',
@@ -436,9 +478,13 @@ window.PORTFOLIO = {
         wordsearch: 'Word_search.exe',
         tetris: 'Tetris.exe',
         notes: 'Notes.txt',
+        binary: 'Binary.exe',
       },
       openApp: 'Open',
       arrange: 'Arrange icons',
+      widget: { title: 'quote_of_the_day.txt', next: 'Another quote', close: 'Hide', on: 'Quotes: on', off: 'Quotes: off' },
+      saver: 'Press any key or move the mouse',
+      konami: 'Konami code! 🎮',
       code: 'Code',
       cal: {
         today: 'Today',
