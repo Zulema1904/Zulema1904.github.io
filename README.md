@@ -13,7 +13,7 @@ index.html        Página única
 css/style.css     Estilos (paleta y fuentes al principio, en :root)
 js/data.js        ✏️  TODO EL CONTENIDO (textos en español e inglés)
 js/icons.js       Iconos pixel-art en SVG
-js/sprites.js     Avatar chibi y gatos en pixel-art (dibujados con texto)
+js/sprites.js     Gatos y cuenco en pixel-art (dibujados con texto)
 js/pets.js        Thor y Hela, las mascotas de escritorio
 js/terminal.js    Terminal y sus comandos
 js/os.js          Escritorio, ventanas, barra de tareas, modo rápido

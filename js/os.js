@@ -46,7 +46,6 @@
   /* ---------- Plantillas de contenido ---------- */
 
   const portrait = (cls = '') => `<img class="portrait ${cls}" src="assets/zulema.jpg" alt="${esc(U().portraitAlt)}" width="256" height="256" loading="lazy">`;
-  const avatarImg = () => `<img class="avatar-img" src="${window.ZSprites.avatar().src}" alt="" width="32" height="32">`;
   const catIcon = () => `<img src="${window.ZSprites.cat('black', 'sit').src}" alt="">`;
   const chips = (items) => `<ul class="chips">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
   const addrBar = (path) => `<div class="addr-bar"><span>${esc(U().address)}</span><div class="addr">${esc(path)}</div></div>`;
@@ -68,7 +67,7 @@
       const icons = [I.notepad, I.terminal, I.zap, catIcon()];
       return `<div class="welcome">
         <div class="welcome-hero">
-          <div class="big-logo" aria-hidden="true">${avatarImg()}</div>
+          ${portrait('welcome-portrait')}
           <div><h3>${esc(w.title)}</h3><p>${esc(w.intro)}</p></div>
         </div>
         <ul class="tips">${tips.map((t, i) => `<li>${icons[i]}<span>${t}</span></li>`).join('')}</ul>
@@ -1006,17 +1005,6 @@
   updateClock();
   setInterval(updateClock, 15000);
   window.ZExtras.setLang();
-
-  // El avatar parpadea de vez en cuando
-  if (!reducedMotion) {
-    const blink = () => {
-      const imgs = $$('.avatar-img');
-      imgs.forEach((img) => { img.src = window.ZSprites.avatar(true).src; });
-      setTimeout(() => imgs.forEach((img) => { img.src = window.ZSprites.avatar().src; }), 160);
-      setTimeout(blink, 2500 + Math.random() * 3500);
-    };
-    setTimeout(blink, 3000);
-  }
 
   if (location.hash === '#cv') openQuick();
   boot().then(() => {

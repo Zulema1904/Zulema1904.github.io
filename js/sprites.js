@@ -45,81 +45,6 @@
     return { src: canvas.toDataURL(), w: canvas.width, h: canvas.height };
   };
 
-  /* ---------- Avatar de Zulema (32×32) ---------- */
-
-  const AVATAR_PALETTE = {
-    O: '#2b1622', // contorno
-    H: '#b4532a', // pelo cobrizo
-    h: '#e0843f', // brillo del pelo
-    d: '#7c3219', // sombra del pelo / cejas
-    S: '#f4cdb0', // piel
-    s: '#dea585', // sombra de piel
-    F: '#cf8a62', // pecas
-    E: '#6f9a3a', // ojos avellana
-    o: '#1f2a12', // pupila
-    w: '#ffffff', // brillo del ojo
-    b: '#f4a3a8', // rubor
-    M: '#a2495a', // boca
-    V: '#5a2e8a', // eyeliner lila
-    G: '#5b4638', // montura de las gafas
-    g: '#b89478', // parte inferior de la montura, más clara
-    L: '#d4787c', // labios
-    T: '#6e3b22', // top marrón
-    t: '#4d2715',
-    N: '#d9dbe8', // colgante plateado
-  };
-
-  // Estilo chibi: cabeza grande, ojos enormes tras gafas redondas, cuerpo pequeñito
-  const AVATAR_HALF = [
-    '.......OO.OOOOOO',
-    '.....OOhHOhHHhHH',
-    '....OhHHdHHHdHHh',
-    '...OHHdHhHHhHHdH',
-    '..OhHHHHdHHHHhHH',
-    '..OHdHhHHHdHHHHd',
-    '.OhHHHHdHhHHdHHH',
-    '.OHHdHhHHHHHHhHH',
-    'OhHHHHHdHHdHHHHd',
-    'OHHdHHhHSHHSHHdH',
-    'OHhHHdHSSSHSSSHS',
-    'OHHHdHSSGGGGGSSS',
-    'OHhHHHSGVVVVGSSS',
-    'OHHdHHSGSwEEGggg',
-    'OHhHHHSGSEoEGSSS',
-    'OHHdHHSGSEoEGSSS',
-    'OHhHHHSGSEEwGSSS',
-    'OHHdHHSSgggggSSs',
-    'OHhHHHSbbbSFSSSS',
-    'OHHdHHSSFSSSSSMS',
-    'OHhHHHdSSSSSSSSM',
-    'OHHdHHHdSSSSSSSS',
-    '.OhHHdHHOSSSSSSS',
-    '.OHHdHhHHOOOOsss',
-    '.OhHHdHHHOTTTSSS',
-    '..OHHhHHOTTTTNSS',
-    '..OHdHHOTTTTTTNS',
-    '..OhHHOTTTTTTTTN',
-    '...OHOTTtTTTTTTT',
-    '....OTTTtTTTTTTT',
-    '....OTTTtTTTTTTT',
-    '....OOOOOOOOOOOO',
-  ];
-
-  // Detalles asimétricos: un rizo sobre la frente y algo de variedad en el pelo
-  const AVATAR_CURLS = [
-    [16, 10, 'h'], [16, 11, 'H'],
-    [27, 4, 'd'], [29, 9, 'h'], [3, 12, 'd'],
-  ];
-  // Ojos cerrados: se limpia el ojo y queda una línea
-  const AVATAR_BLINK = [9, 10, 11, 20, 21, 22].flatMap((x) => [
-    [x, 13, 'S'], [x, 14, 'S'], [x, 15, 'V'], [x, 16, 'S'],
-  ]);
-
-  const avatarGrid = (blink) => {
-    const g = set(toGrid(mirror(AVATAR_HALF)), AVATAR_CURLS);
-    return blink ? set(g, AVATAR_BLINK) : g;
-  };
-
   /* ---------- Gatos ---------- */
 
   const CAT_PALETTES = {
@@ -284,7 +209,6 @@
 
   window.ZSprites = {
     bowl: (level) => memo(`bowl-${level}`, () => render(bowlGrid(level), BOWL_PALETTE)),
-    avatar: (blink = false) => memo(`avatar-${blink}`, () => render(avatarGrid(blink), AVATAR_PALETTE)),
     cat(kind, pose) {
       return memo(`${kind}-${pose}`, () => {
         const p = CAT_PALETTES[kind];

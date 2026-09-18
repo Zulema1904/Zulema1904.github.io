@@ -385,13 +385,6 @@ code {
 
 /* Bienvenida */
 .welcome-hero { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 8px; }
-.big-logo {
-  flex: none; width: 64px; height: 64px;
-  display: grid; place-items: center;
-  background: linear-gradient(160deg, #e2d4ff, #b9a4f5);
-  border: 2px solid var(--dk); box-shadow: 4px 4px 0 var(--pink);
-  color: #fff; font: 700 38px var(--font-ui);
-}
 .tips { list-style: none; margin: 12px 0; padding: 0; }
 .tips li {
   display: flex; gap: 12px; align-items: center;
@@ -404,8 +397,6 @@ code {
 .check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
 .check input { accent-color: var(--accent); width: 16px; height: 16px; }
 
-.avatar-img { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
-.big-logo, .avatar { overflow: hidden; }
 
 /* Retrato ilustrado */
 .portrait {
@@ -414,6 +405,7 @@ code {
   box-shadow: 0 0 0 3px var(--dk), 0 0 18px rgba(154, 124, 240, .65);
 }
 .about-portrait { width: 108px; height: 108px; }
+.welcome-portrait { width: 72px; height: 72px; }
 .cv-portrait { width: 120px; height: 120px; }
 .start-user {
   display: flex; align-items: center; gap: 10px;
@@ -427,13 +419,6 @@ code {
 
 /* Sobre mí */
 .about-head { display: flex; gap: 18px; align-items: center; margin-bottom: 16px; }
-.avatar {
-  flex: none; width: 88px; height: 88px;
-  display: grid; place-items: center;
-  background: linear-gradient(160deg, #e2d4ff, #b9a4f5);
-  border: 2px solid var(--dk); box-shadow: 5px 5px 0 var(--pink);
-  color: #fff; font: 700 36px var(--font-ui);
-}
 .about-head h3 { font-size: 26px; }
 .window-body .role { margin: 0 0 6px; color: var(--blue); font-weight: 500; }
 .window-body .status { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; }
@@ -1105,7 +1090,6 @@ code {
   font: 700 clamp(30px, 5vw, 46px)/1.05 var(--font-ui); letter-spacing: .02em;
 }
 .cv-head h1:focus { outline: none; }
-.cv-avatar { flex: none; width: 112px; height: 112px; border: 2px solid var(--dk); box-shadow: 5px 5px 0 var(--pink); }
 .cv-role { margin: 8px 0 14px; font-size: 18px; font-weight: 500; }
 .cv-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; font-size: 14.5px; }
 .cv-meta a { color: var(--ink); }
