@@ -252,6 +252,28 @@
     return stamp(g, HEAD_CLOSED, 10, 2);
   };
 
+  /* ---------- Comedero ---------- */
+
+  const BOWL_PALETTE = {
+    O: '#2a2360', P: '#ff8fc7', p: '#d9669f', w: '#ffd1e8', K: '#c98a3e', k: '#8a5220',
+  };
+  const BOWL = [
+    '', '', '',
+    'OOOOOOOOOOOOOO',
+    'OwPPPPPPPPPPpO',
+    '.OPPPPPPPPPpO.',
+    '..OppppppppO..',
+    '...OOOOOOOO...',
+  ];
+  // Croquetas según lo lleno que esté: 0 vacío, 1 a medias, 2 lleno
+  const KIBBLE = [
+    [],
+    ['', '', '...kKkKkKkK...'],
+    ['.....KkKk.....', '...kKkKkKkK...', '.KkKkKkKkKkKk.'],
+  ];
+
+  const bowlGrid = (level) => stamp(stamp(blank(14, 8), BOWL, 0, 0), KIBBLE[level], 0, 0);
+
   /* ---------- API ---------- */
 
   const cache = new Map();
@@ -261,6 +283,7 @@
   };
 
   window.ZSprites = {
+    bowl: (level) => memo(`bowl-${level}`, () => render(bowlGrid(level), BOWL_PALETTE)),
     avatar: (blink = false) => memo(`avatar-${blink}`, () => render(avatarGrid(blink), AVATAR_PALETTE)),
     cat(kind, pose) {
       return memo(`${kind}-${pose}`, () => {

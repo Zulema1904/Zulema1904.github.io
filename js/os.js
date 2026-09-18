@@ -309,6 +309,11 @@
     </div>`;
   };
 
+  R.games = () => `${addrBar(U().paths.games)}
+    <div class="launcher">${['sudoku', 'wordsearch', 'tetris'].map((id) =>
+      `<button class="launch" data-open="${id}">${I[APPS[id].icon]}<span>${breakable(U().apps[id])}</span></button>`).join('')}
+    </div>`;
+
   function repaintCalendar() {
     const w = wins.get('calendar');
     if (w) paintWin(w);
@@ -331,8 +336,14 @@
       mount: (body) => { body.innerHTML = `<iframe class="app-frame" src="${monitorSrc()}" title="ZulemaOS Monitor" allow="local-network-access; loopback-network"></iframe>`; },
     },
     calendar: { icon: 'calendar', w: 700, h: 560, render: R.calendar },
+    games: { icon: 'folderGames', w: 460, h: 280, render: R.games },
+    sudoku: { icon: 'sudoku', w: 440, h: 560, mount: (body, ctx) => window.ZApps.sudoku.mount(body, ctx) },
+    wordsearch: { icon: 'wordsearch', w: 720, h: 650, mount: (body, ctx) => window.ZApps.wordsearch.mount(body, ctx) },
+    tetris: { icon: 'tetris', w: 470, h: 640, mount: (body, ctx) => window.ZApps.tetris.mount(body, ctx) },
+    notes: { icon: 'notes', w: 560, h: 460, mount: (body, ctx) => window.ZApps.notes.mount(body, ctx) },
   };
-  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'contact', 'cv', 'trash'];
+  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'contact', 'cv', 'trash'];
+  const appCtx = { lang: () => lang, store: local };
   const monitorSrc = () => `monitor/?embed&lang=${lang}`;
 
   /* ---------- Gestor de ventanas ---------- */
@@ -399,7 +410,7 @@
     enableDrag(el, id);
 
     focusWin(id);
-    if (app.mount) app.mount(w.body, w);
+    if (app.mount) w.instance = app.mount(w.body, appCtx);
   }
 
   function placeWindow(el, app, id) {
@@ -438,6 +449,7 @@
     w.task.title = title;
     const app = APPS[w.id];
     if (app.render) w.body.innerHTML = app.render();
+    else if (w.instance && w.instance.setLang) w.instance.setLang();
   }
 
   function focusWin(id) {
@@ -531,9 +543,10 @@
     startMenu.innerHTML = `
       <div class="start-banner" aria-hidden="true"><span>Zulema<b>OS</b></span></div>
       <ul class="start-list" role="menu">
-        ${['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'contact']
+        ${['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'contact']
           .map((id) => item(`data-open="${id}"`, I[APPS[id].icon], u.apps[id])).join('')}
         <li class="start-sep" role="separator"></li>
+        ${item('data-action="feed"', I.bowl, u.pets.feed)}
         ${item('data-action="quick"', I.zap, u.quick)}
         ${item('data-open="welcome"', I.info, u.readme)}
         ${item('data-action="lang"', I.globe, u.langName)}
@@ -707,6 +720,7 @@
     lang: () => setLang(lang === 'es' ? 'en' : 'es'),
     print: () => window.print(),
     pets: () => { window.ZPets.toggle(); renderStart(); },
+    feed: () => { toggleStart(false); window.ZPets.feed(); renderStart(); },
     'cal-move': (btn) => {
       const step = Number(btn.dataset.step);
       const now = new Date();

@@ -83,6 +83,40 @@
       <path fill="#cbbdf2" d="M7 14h3v3H7zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3zM7 19h3v3H7zm5 0h3v3h-3zm5 0h3v3h-3zM7 24h3v3H7zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3z"/>
       <path fill="#6a4fd8" d="M22 19h3v3h-3z"/>`),
 
+    folderGames: folder('#9dd9f5', '#c9f0ff', '#5fb3dd',
+      `<path fill="${INK}" d="M16 16h12v8H16z"/><path fill="#b79cf5" d="M17 17h10v6H17z"/>
+       <path fill="${INK}" d="M18 19h3v1h-3zm1-1h1v3h-1zm5 0h1v1h-1zm1 2h1v1h-1z"/>`),
+
+    sudoku: svg(`<path fill="${INK}" d="M3 3h26v26H3z"/>
+      <path fill="#fff" d="M4 4h24v24H4z"/>
+      <path fill="#cbbdf2" d="M12 4h1v24h-1zm7 0h1v24h-1zM4 12h24v1H4zm0 7h24v1H4z"/>
+      <path fill="#3552d1" d="M6 6h4v1H6zm3 1h1v2H9zM7 9h3v1H7zm0 1h1v1H7zm0 1h3v1H7z"/>
+      <path fill="#6a4fd8" d="M15 14h2v5h-2zm-1 1h1v1h-1z"/>
+      <path fill="#ff8fc7" d="M21 21h4v1h-4zm0 1h1v1h-1zm0 1h4v1h-4zm3 1h1v1h-1zm-3 1h4v1h-4z"/>`),
+
+    wordsearch: svg(`<path fill="${INK}" d="M3 3h26v26H3z"/>
+      <path fill="#fff" d="M4 4h24v24H4z"/>
+      <path fill="#ffd66b" d="M5 12h22v5H5z"/>
+      <path fill="#9384c9" d="M6 6h2v3H6zm5 0h2v3h-2zm5 0h2v3h-2zm5 0h2v3h-2zM6 21h2v3H6zm5 0h2v3h-2zm5 0h2v3h-2zm5 0h2v3h-2z"/>
+      <path fill="${INK}" d="M6 13h2v3H6zm5 0h2v3h-2zm5 0h2v3h-2zm5 0h2v3h-2z"/>`),
+
+    tetris: svg(`<path fill="${INK}" d="M3 14h9v8H3zM11 6h9v16h-9zM19 14h10v16H19zM3 21h9v9H3z"/>
+      <path fill="#b79cf5" d="M4 15h7v6H4z"/><path fill="#7fe3ff" d="M12 7h7v6h-7zm0 7h7v7h-7z"/>
+      <path fill="#ff8fc7" d="M20 15h8v6h-8zm0 7h8v7h-8z"/><path fill="#9dffb0" d="M4 22h7v7H4z"/>
+      <path fill="#fff" opacity=".5" d="M4 15h7v1H4zm8-8h7v1h-7zm8 8h8v1h-8zM4 22h7v1H4z"/>`),
+
+    notes: svg(`<path fill="${INK}" d="M4 3h24v20l-7 7H4z"/>
+      <path fill="#ffe89a" d="M5 4h22v18h-6v7H5z"/>
+      <path fill="#e8c65c" d="M21 22h6l-6 6z"/>
+      <path fill="#ff8fc7" d="M5 4h22v3H5z"/>
+      <path fill="#b09340" d="M8 11h16v1H8zm0 4h16v1H8zm0 4h10v1H8z"/>`),
+
+    bowl: svg(`<path fill="#8a5220" d="M9 11h3v2H9zm5-1h3v2h-3zm5 1h3v2h-3zm-7 2h3v1h-3zm5 0h3v1h-3z"/>
+      <path fill="#c98a3e" d="M7 13h18v2H7zm5-3h2v1h-2zm5 0h2v1h-2z"/>
+      <path fill="${INK}" d="M2 15h28v2H2zm1 2h26v3H3zm2 3h22v3H5zm3 3h16v2H8z"/>
+      <path fill="#ff8fc7" d="M4 17h24v2H4zm2 2h20v2H6zm3 2h14v2H9z"/>
+      <path fill="#ffd1e8" d="M4 17h3v1H4z"/>`),
+
     // Botones de la barra de título
     btnMin: '<svg viewBox="0 0 8 8" aria-hidden="true"><path fill="currentColor" d="M1 6h6v2H1z"/></svg>',
     btnMax: '<svg viewBox="0 0 8 8" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 0h8v8H0zM1 2v5h6V2z"/></svg>',

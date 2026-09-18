@@ -15,10 +15,10 @@
 
   // Archivos "visibles" con ls / open / cat
   const FILES = {
-    es: { 'sobre_mi.txt': 'about', 'experiencia/': 'experience', 'proyectos/': 'projects', 'habilidades.exe': 'skills', 'monitor.exe': 'monitor', 'calendario.exe': 'calendar', 'contacto.exe': 'contact', 'cv.pdf': 'cv', 'papelera/': 'trash' },
-    en: { 'about_me.txt': 'about', 'experience/': 'experience', 'projects/': 'projects', 'skills.exe': 'skills', 'monitor.exe': 'monitor', 'calendar.exe': 'calendar', 'contact.exe': 'contact', 'cv.pdf': 'cv', 'trash/': 'trash' },
+    es: { 'sobre_mi.txt': 'about', 'experiencia/': 'experience', 'proyectos/': 'projects', 'habilidades.exe': 'skills', 'monitor.exe': 'monitor', 'calendario.exe': 'calendar', 'juegos/': 'games', 'notas.txt': 'notes', 'contacto.exe': 'contact', 'cv.pdf': 'cv', 'papelera/': 'trash' },
+    en: { 'about_me.txt': 'about', 'experience/': 'experience', 'projects/': 'projects', 'skills.exe': 'skills', 'monitor.exe': 'monitor', 'calendar.exe': 'calendar', 'games/': 'games', 'notes.txt': 'notes', 'contact.exe': 'contact', 'cv.pdf': 'cv', 'trash/': 'trash' },
   };
-  const APP_IDS = ['about', 'experience', 'projects', 'skills', 'monitor', 'calendar', 'contact', 'cv', 'trash', 'welcome', 'terminal'];
+  const APP_IDS = ['about', 'experience', 'projects', 'skills', 'monitor', 'calendar', 'games', 'sudoku', 'wordsearch', 'tetris', 'notes', 'contact', 'cv', 'trash', 'welcome', 'terminal'];
 
   const STR = {
     es: {
@@ -36,6 +36,9 @@
         ['open <app>', 'Abre una ventana (about, projects, skills…)'],
         ['top', 'Abre el monitor del sistema 🖥️'],
         ['cal', 'Calendario del mes'],
+        ['juegos', 'Sudoku, sopa de letras y Tetris 🎮'],
+        ['notas', 'Bloc de notas'],
+        ['feed', 'Dar de comer a Thor y Hela 🐟'],
         ['ls', 'Lista los archivos'],
         ['neofetch', 'Información del sistema'],
         ['ping zulema', '¿Estoy disponible?'],
@@ -72,6 +75,8 @@
       catsOff: 'Los gatos se han ido a dormir a otra habitación. 🌙',
       catsOn: '¡Han vuelto los gatos! 🐾',
       calHint: 'Versión con festivos y citas: open calendario',
+      vim: 'Para salir de vim escribe :q!… Tranqui, que abro el bloc de notas 😅',
+      fed: (n) => `🐟 Comedero lleno. Thor y Hela van corriendo… (${n} comidas servidas)`,
       thor: '⚡ Thor ha tirado tu taza de la mesa. Mirándote. Sin remordimientos.',
       hela: '👑 Hela te ha mirado, ha bostezado y ha seguido durmiendo. Es un honor.',
     },
@@ -90,6 +95,9 @@
         ['open <app>', 'Open a window (about, projects, skills…)'],
         ['top', 'Open the system monitor 🖥️'],
         ['cal', 'This month\'s calendar'],
+        ['games', 'Sudoku, word search and Tetris 🎮'],
+        ['notes', 'Notepad'],
+        ['feed', 'Feed Thor and Hela 🐟'],
         ['ls', 'List files'],
         ['neofetch', 'System information'],
         ['ping zulema', 'Am I available?'],
@@ -126,6 +134,8 @@
       catsOff: 'The cats went to nap in another room. 🌙',
       catsOn: 'The cats are back! 🐾',
       calHint: 'Full version with holidays and meetings: open calendar',
+      vim: 'To exit vim type :q!… Relax, I\'ll open the notepad instead 😅',
+      fed: (n) => `🐟 Bowl filled. Thor and Hela are running over… (${n} meals served)`,
       thor: '⚡ Thor just knocked your mug off the desk. Staring at you. No regrets.',
       hela: '👑 Hela looked at you, yawned and went back to sleep. You should feel honoured.',
     },
@@ -357,6 +367,22 @@
         }
         print(dim(S().calHint));
       },
+      juegos() {
+        print(S().opening(P().ui.apps.games));
+        ctx.openApp('games');
+      },
+      notas() {
+        print(S().opening(P().ui.apps.notes));
+        ctx.openApp('notes');
+      },
+      vim() {
+        print(S().vim);
+        ctx.openApp('notes');
+      },
+      feed() {
+        window.ZPets.feed();
+        print(S().fed(window.ZPets.meals()));
+      },
       thor() { print(S().thor); },
       hela() { print(S().hela); },
       meow() {
@@ -372,6 +398,9 @@
       ipconfig: commands.ifconfig, hello: commands.hola, hi: commands.hola, man: commands.help, '?': commands.help,
       gatos: commands.cats, pets: commands.cats, miau: commands.meow,
       htop: commands.top, monitor: commands.top, calendar: commands.cal, calendario: commands.cal,
+      games: commands.juegos, notes: commands.notas, nano: commands.notas, vi: commands.vim, comida: commands.feed,
+      sudoku: () => ctx.openApp('sudoku'), tetris: () => ctx.openApp('tetris'),
+      sopa: () => ctx.openApp('wordsearch'), wordsearch: () => ctx.openApp('wordsearch'),
     });
 
     const run = async (raw) => {
