@@ -36,6 +36,7 @@
         ['open <app>', 'Abre una ventana (about, projects, skills…)'],
         ['top', 'Abre el monitor del sistema 🖥️'],
         ['cal', 'Calendario del mes'],
+        ['man python|java', 'Mis apuntes de programación 📚'],
         ['juegos', 'Sudoku, sopa de letras y Tetris 🎮'],
         ['notas', 'Bloc de notas'],
         ['feed', 'Dar de comer a Thor y Hela 🐟'],
@@ -102,6 +103,7 @@
         ['open <app>', 'Open a window (about, projects, skills…)'],
         ['top', 'Open the system monitor 🖥️'],
         ['cal', 'This month\'s calendar'],
+        ['man python|java', 'My programming study notes 📚'],
         ['games', 'Sudoku, word search and Tetris 🎮'],
         ['notes', 'Notepad'],
         ['feed', 'Feed Thor and Hela 🐟'],
@@ -452,7 +454,16 @@
     // Alias
     Object.assign(commands, {
       exp: commands.experience, edu: commands.education, dir: commands.ls, cls: commands.clear,
-      ipconfig: commands.ifconfig, hello: commands.hola, hi: commands.hola, man: commands.help, '?': commands.help,
+      ipconfig: commands.ifconfig, hello: commands.hola, hi: commands.hola, '?': commands.help,
+      // "man python" abre los apuntes de Python; "man" a secas, la ayuda
+      man(args) {
+        const topic = (args[0] || '').toLowerCase();
+        if (!topic) return commands.help();
+        if (!window.ZNotesData.some((x) => x.id === topic)) return print(S().noSuchFile(topic));
+        print(S().opening(`${P().ui.apps.notebook} · ${topic}`));
+        ctx.study(topic);
+      },
+      apuntes: () => ctx.study(), study: () => ctx.study(),
       gatos: commands.cats, pets: commands.cats, miau: commands.meow,
       htop: commands.top, monitor: commands.top, calendar: commands.cal, calendario: commands.cal,
       games: commands.juegos, notes: commands.notas, nano: commands.notas, vi: commands.vim, comida: commands.feed,

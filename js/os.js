@@ -342,8 +342,9 @@
     tetris: { icon: 'tetris', w: 470, h: 640, mount: (body, ctx) => window.ZApps.tetris.mount(body, ctx) },
     notes: { icon: 'notes', w: 560, h: 460, mount: (body, ctx) => window.ZApps.notes.mount(body, ctx) },
     binary: { icon: 'binary', w: 640, mount: (body, ctx) => window.ZApps.binary.mount(body, ctx) },
+    notebook: { icon: 'notebook', w: 860, h: 640, mount: (body, ctx) => window.ZApps.notebook.mount(body, ctx) },
   };
-  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact', 'cv', 'trash'];
+  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'notebook', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact', 'cv', 'trash'];
   const appCtx = { lang: () => lang, store: local };
   const monitorSrc = () => `monitor/?embed&lang=${lang}`;
 
@@ -525,6 +526,12 @@
     setLang: (l) => setLang(l),
     openApp: (id) => openApp(id),
     close: () => closeWin('terminal'),
+    study: (topic) => {
+      if (topic) local.set('zos-notebook-tab', topic);
+      openApp('notebook');
+      const w = wins.get('notebook');
+      if (topic && w && w.instance) w.instance.goto(topic);
+    },
   };
 
   /* ---------- Escritorio, menú Inicio y barra de tareas ---------- */
@@ -657,7 +664,7 @@
     startMenu.innerHTML = `
       <div class="start-banner" aria-hidden="true"><span>Zulema<b>OS</b></span></div>
       <ul class="start-list" role="menu">
-        ${['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact']
+        ${['about', 'experience', 'projects', 'skills', 'notebook', 'terminal', 'monitor', 'calendar', 'games', 'notes', 'binary', 'contact']
           .map((id) => item(`data-open="${id}"`, I[APPS[id].icon], u.apps[id])).join('')}
         <li class="start-sep" role="separator"></li>
         ${item('data-action="feed"', I.bowl, u.pets.feed)}

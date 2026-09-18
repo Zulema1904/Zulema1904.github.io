@@ -125,6 +125,15 @@
       <path fill="#3a3470" d="M11 18h4v4h-4zm12 0h4v4h-4z"/>
       <path fill="#fff" d="M6 19h1v1H6zm12 0h1v1h-1z"/>`),
 
+    notebook: svg(`<path fill="${INK}" d="M6 3h22v27H6z"/>
+      <path fill="#b79cf5" d="M7 4h20v25H7z"/>
+      <path fill="#fff" d="M11 4h16v25H11z"/>
+      <path fill="#cfe3ff" d="M11 9h16v1H11zm0 4h16v1H11zm0 4h16v1H11zm0 4h16v1H11zm0 4h16v1H11z"/>
+      <path fill="#ff8fc7" d="M13 4h1v25h-1z"/>
+      <path fill="${INK}" d="M4 7h5v2H4zm0 6h5v2H4zm0 6h5v2H4zm0 6h5v2H4z"/>
+      <path fill="#ffd66b" d="M27 6h3v5h-3z"/><path fill="#7fe3ff" d="M27 12h3v5h-3z"/>
+      <path fill="#6a4fd8" d="M16 11h8v2h-8z"/>`),
+
     quote: svg(`<path fill="${INK}" d="M3 4h26v18H14l-6 6v-6H3z"/>
       <path fill="#fff" d="M4 5h24v16H13l-4 4v-4H4z"/>
       <path fill="#6a4fd8" d="M8 9h4v4h-2v2H8zm8 0h4v4h-2v2h-2z"/>`),
