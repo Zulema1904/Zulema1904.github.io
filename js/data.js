@@ -10,6 +10,30 @@ window.PORTFOLIO = {
   github: 'https://github.com/Zulema1904',
   location: 'Coslada, Madrid',
 
+  // Calendario: hitos (por mes) y días especiales (se repiten cada año salvo que tengan "year").
+  // Los festivos de España y Madrid se calculan solos en os.js.
+  calendar: {
+    milestones: [
+      { ym: '2021-09', icon: '🎒', es: 'Empiezo el Grado Medio en Sistemas Microinformáticos y Redes', en: 'I start my IT Systems & Networks degree (SMR)' },
+      { ym: '2023-03', icon: '🛠️', es: 'Primer trabajo: soporte técnico en Caredesk', en: 'First job: IT support at Caredesk' },
+      { ym: '2023-06', icon: '🎓', es: 'Termino SMR', en: 'I finish SMR' },
+      { ym: '2023-09', icon: '💻', es: 'Empiezo el Grado Superior en Desarrollo de Aplicaciones Web', en: 'I start my Web Application Development degree (DAW)' },
+      { ym: '2025-06', icon: '🎓', es: 'Termino DAW', en: 'I finish DAW' },
+      { ym: '2025-09', icon: '⚡', es: 'Entro en Power Smart Control: Python, simulación e IA', en: 'I join Power Smart Control: Python, simulation and AI' },
+      { ym: '2026-01', icon: '🏛️', es: 'Empiezo en la Universidad Carlos III de Madrid', en: 'I start at Universidad Carlos III de Madrid' },
+      { ym: '2026-09', icon: '💜', es: 'Nacen ZulemaOS y ZulemaOS Monitor', en: 'ZulemaOS and ZulemaOS Monitor are born' },
+    ],
+    days: [
+      { md: '02-11', icon: '👩‍🔬', es: 'Día de la Mujer y la Niña en la Ciencia', en: 'Day of Women and Girls in Science' },
+      { md: '03-14', icon: 'π', es: 'Día de Pi', en: 'Pi Day' },
+      { md: '05-17', icon: '🌐', es: 'Día de Internet', en: 'World Internet Day' },
+      { md: '08-08', icon: '🐈', es: 'Día Internacional del Gato (¡fiesta para Hela!)', en: 'International Cat Day (party for Hela!)' },
+      { md: '10-27', icon: '⚡', es: 'Día del Gato Negro (¡el día de Thor!)', en: 'Black Cat Day (Thor\'s day!)' },
+      { md: '11-30', icon: '🔒', es: 'Día de la Seguridad Informática', en: 'Computer Security Day' },
+      { md: '09-18', year: 2026, icon: '💜', es: 'Nace ZulemaOS', en: 'ZulemaOS is born' },
+    ],
+  },
+
   // Mascotas de escritorio (sprite: 'black' | 'tabby')
   pets: [
     {
@@ -91,6 +115,16 @@ window.PORTFOLIO = {
     languages: [['Español', 'Nativo'], ['Inglés', 'Técnico · B1']],
     projects: [
       {
+        name: 'ZulemaOS Monitor',
+        kind: 'live',
+        icon: 'monitor',
+        tag: 'Nuevo · Python',
+        desc: 'Monitor de sistema en tiempo real con FastAPI, WebSocket y psutil. Gráficas retro, tests con CI… y Thor y Hela reaccionando a la carga de la CPU.',
+        stack: ['Python', 'FastAPI', 'WebSocket', 'psutil', 'pytest'],
+        open: 'monitor',
+        repo: 'https://github.com/Zulema1904/zulemaos-monitor',
+      },
+      {
         name: 'ZulemaOS',
         kind: 'live',
         tag: 'En vivo',
@@ -151,6 +185,26 @@ window.PORTFOLIO = {
         contact: 'Contacto.exe',
         cv: 'CV.pdf',
         trash: 'Papelera',
+        monitor: 'Monitor.exe',
+        calendar: 'Calendario',
+      },
+      openApp: 'Abrir',
+      code: 'Código',
+      cal: {
+        today: 'Hoy',
+        prev: 'Mes anterior',
+        next: 'Mes siguiente',
+        thisMonth: 'Este mes',
+        history: 'En mi historia',
+        nothing: 'Nada especial este mes… salvo las siestas de Hela 😴',
+        holiday: 'Festivo',
+        book: '¿Hablamos?',
+        bookHint: 'Elige un día laborable en el calendario para proponerme una entrevista.',
+        bookInvalid: 'Ese día no toca 🐈 Elige un día laborable a partir de hoy.',
+        bookBtn: (d) => `Proponer entrevista el ${d}`,
+        subject: (d) => `Propuesta de entrevista · ${d}`,
+        body: (d) => `Hola, Zulema:\n\nMe gustaría proponerte una entrevista el ${d}. ¿A qué hora te vendría bien?\n\nUn saludo,\n`,
+        clock: 'Abrir el calendario',
       },
       paths: {
         experience: 'C:\\Zulema\\Experiencia',
@@ -293,6 +347,16 @@ window.PORTFOLIO = {
     languages: [['Spanish', 'Native'], ['English', 'Technical · B1']],
     projects: [
       {
+        name: 'ZulemaOS Monitor',
+        kind: 'live',
+        icon: 'monitor',
+        tag: 'New · Python',
+        desc: 'Real-time system monitor built with FastAPI, WebSocket and psutil. Retro charts, tests with CI… and Thor and Hela reacting to CPU load.',
+        stack: ['Python', 'FastAPI', 'WebSocket', 'psutil', 'pytest'],
+        open: 'monitor',
+        repo: 'https://github.com/Zulema1904/zulemaos-monitor',
+      },
+      {
         name: 'ZulemaOS',
         kind: 'live',
         tag: 'Live',
@@ -353,6 +417,26 @@ window.PORTFOLIO = {
         contact: 'Contact.exe',
         cv: 'CV.pdf',
         trash: 'Recycle Bin',
+        monitor: 'Monitor.exe',
+        calendar: 'Calendar',
+      },
+      openApp: 'Open',
+      code: 'Code',
+      cal: {
+        today: 'Today',
+        prev: 'Previous month',
+        next: 'Next month',
+        thisMonth: 'This month',
+        history: 'My story',
+        nothing: 'Nothing special this month… except Hela\'s naps 😴',
+        holiday: 'Public holiday',
+        book: 'Let\'s talk',
+        bookHint: 'Pick a working day on the calendar to suggest an interview.',
+        bookInvalid: 'Not that day 🐈 Pick a working day from today onwards.',
+        bookBtn: (d) => `Suggest an interview on ${d}`,
+        subject: (d) => `Interview proposal · ${d}`,
+        body: (d) => `Hi Zulema,\n\nI'd like to suggest an interview on ${d}. What time would suit you?\n\nBest regards,\n`,
+        clock: 'Open the calendar',
       },
       paths: {
         experience: 'C:\\Zulema\\Experience',

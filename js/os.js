@@ -112,11 +112,14 @@
         <div class="cards">
           ${L().projects.map((p) => `
             <article class="card">
-              <div class="card-head">${p.kind === 'live' ? I.terminal : I.folderLilac}<h4>${esc(p.name)}</h4></div>
+              <div class="card-head">${I[p.icon] || (p.kind === 'live' ? I.terminal : I.folderLilac)}<h4>${esc(p.name)}</h4></div>
               <span class="badge ${p.kind}">${esc(p.tag)}</span>
               <p>${esc(p.desc)}</p>
               ${chips(p.stack)}
-              ${p.url ? `<a class="btn" href="${esc(p.url)}" target="_blank" rel="noopener">↗ Ver</a>` : ''}
+              ${p.open || p.repo ? `<div class="card-actions">
+                ${p.open ? `<button class="btn primary" data-open="${esc(p.open)}">▶ ${esc(U().openApp)}</button>` : ''}
+                ${p.repo ? `<a class="btn" href="${esc(p.repo)}" target="_blank" rel="noopener">&lt;/&gt; ${esc(U().code)}</a>` : ''}
+              </div>` : ''}
             </article>`).join('')}
           <div class="card ghost">${I.notepad}<strong>${esc(U().comingSoon)}</strong><span>${esc(U().comingSoonText)}</span></div>
         </div>`;
@@ -160,6 +163,157 @@
     },
   };
 
+  /* ---------- Calendario ---------- */
+
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const ymd = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const locale = () => (lang === 'es' ? 'es-ES' : 'en-GB');
+  const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const longDate = (d) => d.toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Domingo de Pascua (algoritmo anónimo gregoriano)
+  function easter(y) {
+    const a = y % 19; const b = Math.floor(y / 100); const c = y % 100;
+    const d = Math.floor(b / 4); const e = b % 4; const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3); const h = (19 * a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4); const k = c % 4; const l = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = Math.floor((a + 11 * h + 22 * l) / 451);
+    const month = Math.floor((h + l - 7 * m + 114) / 31);
+    return new Date(y, month - 1, ((h + l - 7 * m + 114) % 31) + 1);
+  }
+
+  const HOLIDAYS = [
+    ['01-01', 'Año Nuevo', 'New Year\'s Day'],
+    ['01-06', 'Reyes', 'Epiphany'],
+    ['05-01', 'Día del Trabajo', 'Labour Day'],
+    ['05-02', 'Fiesta de la Comunidad de Madrid', 'Madrid Region Day'],
+    ['08-15', 'Asunción', 'Assumption Day'],
+    ['10-12', 'Fiesta Nacional de España', 'National Day of Spain'],
+    ['11-01', 'Todos los Santos', 'All Saints\' Day'],
+    ['12-06', 'Día de la Constitución', 'Constitution Day'],
+    ['12-08', 'Inmaculada Concepción', 'Immaculate Conception'],
+    ['12-25', 'Navidad', 'Christmas Day'],
+  ];
+
+  // Todos los eventos de un año: { 'AAAA-MM-DD': [{ icon, text, holiday }] }
+  const yearCache = new Map();
+  function yearEvents(y) {
+    const key = `${y}-${lang}`;
+    if (yearCache.has(key)) return yearCache.get(key);
+    const ev = {};
+    const add = (date, icon, text, holiday = false) => { (ev[date] ||= []).push({ icon, text, holiday }); };
+
+    HOLIDAYS.forEach(([md, es, en]) => add(`${y}-${md}`, '🎉', lang === 'es' ? es : en, true));
+    const e = easter(y);
+    const shift = (days) => ymd(new Date(e.getFullYear(), e.getMonth(), e.getDate() + days));
+    add(shift(-3), '🎉', lang === 'es' ? 'Jueves Santo' : 'Maundy Thursday', true);
+    add(shift(-2), '🎉', lang === 'es' ? 'Viernes Santo' : 'Good Friday', true);
+
+    D.calendar.days.filter((d) => !d.year || d.year === y).forEach((d) => add(`${y}-${d.md}`, d.icon, d[lang]));
+    // Día del Programador: el día 256 del año
+    add(ymd(new Date(y, 0, 256)), '💻', lang === 'es' ? 'Día del Programador (día 256 del año)' : 'Programmers\' Day (day 256 of the year)');
+    // Día de Ada Lovelace: segundo martes de octubre
+    const oct1 = new Date(y, 9, 1);
+    add(ymd(new Date(y, 9, 1 + ((9 - oct1.getDay()) % 7) + 7)), '👩‍💻', lang === 'es' ? 'Día de Ada Lovelace' : 'Ada Lovelace Day');
+
+    yearCache.set(key, ev);
+    return ev;
+  }
+  const eventsOn = (date) => yearEvents(Number(date.slice(0, 4)))[date] || [];
+
+  const cal = {
+    view: (() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })(),
+    selected: null,
+  };
+
+  const bookable = (date) => {
+    const d = new Date(`${date}T12:00:00`);
+    const wd = d.getDay();
+    return date >= ymd(new Date()) && wd !== 0 && wd !== 6 && !eventsOn(date).some((e) => e.holiday);
+  };
+
+  R.calendar = () => {
+    const c = U().cal;
+    const y = cal.view.getFullYear();
+    const m = cal.view.getMonth();
+    const today = ymd(new Date());
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7; // semana empieza en lunes
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const weeks = Math.ceil((offset + daysInMonth) / 7);
+
+    const heads = Array.from({ length: 7 }, (_, i) =>
+      `<th scope="col">${esc(new Date(2024, 0, 1 + i).toLocaleDateString(locale(), { weekday: 'narrow' }))}</th>`).join('');
+
+    let rows = '';
+    for (let w = 0; w < weeks; w++) {
+      rows += '<tr>';
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(y, m, 1 - offset + w * 7 + i);
+        const date = ymd(d);
+        const evs = eventsOn(date);
+        const cls = [
+          d.getMonth() !== m && 'out',
+          date === today && 'today',
+          i >= 5 && 'weekend',
+          evs.some((e) => e.holiday) && 'holiday',
+          evs.some((e) => !e.holiday) && 'special',
+          date === cal.selected && 'selected',
+        ].filter(Boolean).join(' ');
+        const label = [longDate(d), ...evs.map((e) => e.text)].join(' · ');
+        rows += `<td><button class="cal-day ${cls}" data-action="cal-day" data-date="${date}" aria-label="${esc(label)}" title="${esc(evs.map((e) => `${e.icon} ${e.text}`).join('\n'))}" aria-pressed="${date === cal.selected}">${d.getDate()}${evs.length ? `<span class="cal-dot">${evs[0].icon}</span>` : ''}</button></td>`;
+      }
+      rows += '</tr>';
+    }
+
+    const monthEvents = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = `${y}-${pad2(m + 1)}-${pad2(day)}`;
+      eventsOn(date).forEach((e) => monthEvents.push(`<li class="${e.holiday ? 'is-holiday' : ''}"><b>${day}</b> ${e.icon} ${esc(e.text)}</li>`));
+    }
+
+    const viewYm = `${y}-${pad2(m + 1)}`;
+    const story = D.calendar.milestones.map((s) => {
+      const [sy, sm] = s.ym.split('-').map(Number);
+      const when = capital(new Date(sy, sm - 1, 1).toLocaleDateString(locale(), { month: 'short', year: 'numeric' }));
+      return `<li class="${s.ym === viewYm ? 'current' : ''}"><button class="link" data-action="cal-goto" data-ym="${s.ym}">${esc(when)}</button> ${s.icon} ${esc(s[lang])}</li>`;
+    }).join('');
+
+    let booking = `<p class="muted">${esc(c.bookHint)}</p>`;
+    if (cal.selected) {
+      const nice = longDate(new Date(`${cal.selected}T12:00:00`));
+      const href = `mailto:${D.email}?subject=${encodeURIComponent(c.subject(nice))}&body=${encodeURIComponent(c.body(nice))}`;
+      const evs = eventsOn(cal.selected);
+      booking = `${evs.length ? `<ul class="cal-sel-events">${evs.map((e) => `<li>${e.icon} ${esc(e.text)}</li>`).join('')}</ul>` : ''}
+        ${bookable(cal.selected)
+          ? `<a class="btn primary" href="${esc(href)}">✉ ${esc(c.bookBtn(nice))}</a>`
+          : `<p class="muted">${esc(c.bookInvalid)}</p>`}`;
+    }
+
+    return `<div class="cal">
+      <div class="cal-main">
+        <div class="cal-head">
+          <button class="btn" data-action="cal-move" data-step="-1" aria-label="${esc(c.prev)}">◀</button>
+          <h3 aria-live="polite">${esc(capital(cal.view.toLocaleDateString(locale(), { month: 'long', year: 'numeric' })))}</h3>
+          <button class="btn" data-action="cal-move" data-step="1" aria-label="${esc(c.next)}">▶</button>
+          <button class="btn" data-action="cal-move" data-step="0">${esc(c.today)}</button>
+        </div>
+        <table class="cal-grid"><thead><tr>${heads}</tr></thead><tbody>${rows}</tbody></table>
+        <fieldset class="group cal-book"><legend>${esc(c.book)}</legend>${booking}</fieldset>
+      </div>
+      <div class="cal-side">
+        <h4>${esc(c.thisMonth)}</h4>
+        ${monthEvents.length ? `<ul class="cal-list">${monthEvents.join('')}</ul>` : `<p class="muted">${esc(c.nothing)}</p>`}
+        <h4>${esc(c.history)}</h4>
+        <ul class="cal-list cal-story">${story}</ul>
+      </div>
+    </div>`;
+  };
+
+  function repaintCalendar() {
+    const w = wins.get('calendar');
+    if (w) paintWin(w);
+  }
+
   /* ---------- Aplicaciones ---------- */
 
   const APPS = {
@@ -172,8 +326,14 @@
     contact: { icon: 'mail', w: 460, render: R.contact },
     cv: { icon: 'pdf', action: () => openQuick() },
     trash: { icon: 'trash', w: 460, h: 360, render: R.trash },
+    monitor: {
+      icon: 'monitor', w: 1000, h: 680, bodyClass: 'frame',
+      mount: (body) => { body.innerHTML = `<iframe class="app-frame" src="${monitorSrc()}" title="ZulemaOS Monitor"></iframe>`; },
+    },
+    calendar: { icon: 'calendar', w: 700, h: 560, render: R.calendar },
   };
-  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'contact', 'cv', 'trash'];
+  const DESKTOP_ICONS = ['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'contact', 'cv', 'trash'];
+  const monitorSrc = () => `monitor/?embed&lang=${lang}`;
 
   /* ---------- Gestor de ventanas ---------- */
 
@@ -371,7 +531,7 @@
     startMenu.innerHTML = `
       <div class="start-banner" aria-hidden="true"><span>Zulema<b>OS</b></span></div>
       <ul class="start-list" role="menu">
-        ${['about', 'experience', 'projects', 'skills', 'terminal', 'contact']
+        ${['about', 'experience', 'projects', 'skills', 'terminal', 'monitor', 'calendar', 'contact']
           .map((id) => item(`data-open="${id}"`, I[APPS[id].icon], u.apps[id])).join('')}
         <li class="start-sep" role="separator"></li>
         ${item('data-action="quick"', I.zap, u.quick)}
@@ -395,6 +555,8 @@
     $('#lang-btn').textContent = U().langBtn;
     $('#lang-btn').setAttribute('aria-label', U().langName);
     $('#wm-role').textContent = L().role;
+    $('#clock-btn').setAttribute('aria-label', U().cal.clock);
+    $('#clock-btn').title = U().cal.clock;
   }
 
   function updateClock() {
@@ -412,6 +574,8 @@
     renderIcons();
     renderStart();
     wins.forEach(paintWin);
+    const monitorFrame = wins.get('monitor') && $('iframe', wins.get('monitor').body);
+    if (monitorFrame) monitorFrame.src = monitorSrc();
     if (!quickEl.hidden) quickEl.innerHTML = renderQuick();
     updateClock();
   }
@@ -543,6 +707,25 @@
     lang: () => setLang(lang === 'es' ? 'en' : 'es'),
     print: () => window.print(),
     pets: () => { window.ZPets.toggle(); renderStart(); },
+    'cal-move': (btn) => {
+      const step = Number(btn.dataset.step);
+      const now = new Date();
+      cal.view = step ? new Date(cal.view.getFullYear(), cal.view.getMonth() + step, 1) : new Date(now.getFullYear(), now.getMonth(), 1);
+      repaintCalendar();
+    },
+    'cal-goto': (btn) => {
+      const [y, m] = btn.dataset.ym.split('-').map(Number);
+      cal.view = new Date(y, m - 1, 1);
+      repaintCalendar();
+    },
+    'cal-day': (btn) => {
+      const date = btn.dataset.date;
+      cal.selected = cal.selected === date ? null : date;
+      const d = new Date(`${date}T12:00:00`);
+      if (d.getMonth() !== cal.view.getMonth()) cal.view = new Date(d.getFullYear(), d.getMonth(), 1);
+      repaintCalendar();
+      $(`.cal-day[data-date="${date}"]`)?.focus({ preventScroll: true });
+    },
     shutdown,
     'close-welcome': () => closeWin('welcome'),
     'copy-email': (btn) => {
@@ -578,6 +761,19 @@
   });
 
   startBtn.addEventListener('click', () => toggleStart());
+  $('#clock-btn').addEventListener('click', () => openApp('calendar'));
+
+  // Los clics dentro de un <iframe> no llegan a esta página: cuando el foco
+  // se va a uno, se trae su ventana al frente.
+  window.addEventListener('blur', () => {
+    setTimeout(() => {
+      const frame = document.activeElement;
+      if (frame && frame.tagName === 'IFRAME') {
+        const win = frame.closest('.window');
+        if (win) focusWin(win.dataset.app);
+      }
+    });
+  });
   $('#lang-btn').addEventListener('click', actions.lang);
   $('#quick-btn').addEventListener('click', openQuick);
   window.addEventListener('hashchange', () => {

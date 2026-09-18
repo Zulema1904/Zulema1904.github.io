@@ -18,7 +18,12 @@ js/pets.js        Thor y Hela, las mascotas de escritorio
 js/terminal.js    Terminal y sus comandos
 js/os.js          Escritorio, ventanas, barra de tareas, modo rápido
 assets/           Favicon y futuras imágenes
+monitor/          Copia de la interfaz de ZulemaOS Monitor (se abre como Monitor.exe)
 ```
+
+La carpeta `monitor/` es una copia de `web/` del repositorio
+[zulemaos-monitor](https://github.com/Zulema1904/zulemaos-monitor). Si cambias el monitor,
+vuelve a copiar esos archivos aquí.
 
 Para cambiar textos, experiencia, habilidades o proyectos solo hace falta editar
 `js/data.js`. Cada idioma (`es` / `en`) tiene la misma estructura.

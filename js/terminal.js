@@ -15,10 +15,10 @@
 
   // Archivos "visibles" con ls / open / cat
   const FILES = {
-    es: { 'sobre_mi.txt': 'about', 'experiencia/': 'experience', 'proyectos/': 'projects', 'habilidades.exe': 'skills', 'contacto.exe': 'contact', 'cv.pdf': 'cv', 'papelera/': 'trash' },
-    en: { 'about_me.txt': 'about', 'experience/': 'experience', 'projects/': 'projects', 'skills.exe': 'skills', 'contact.exe': 'contact', 'cv.pdf': 'cv', 'trash/': 'trash' },
+    es: { 'sobre_mi.txt': 'about', 'experiencia/': 'experience', 'proyectos/': 'projects', 'habilidades.exe': 'skills', 'monitor.exe': 'monitor', 'calendario.exe': 'calendar', 'contacto.exe': 'contact', 'cv.pdf': 'cv', 'papelera/': 'trash' },
+    en: { 'about_me.txt': 'about', 'experience/': 'experience', 'projects/': 'projects', 'skills.exe': 'skills', 'monitor.exe': 'monitor', 'calendar.exe': 'calendar', 'contact.exe': 'contact', 'cv.pdf': 'cv', 'trash/': 'trash' },
   };
-  const APP_IDS = ['about', 'experience', 'projects', 'skills', 'contact', 'cv', 'trash', 'welcome', 'terminal'];
+  const APP_IDS = ['about', 'experience', 'projects', 'skills', 'monitor', 'calendar', 'contact', 'cv', 'trash', 'welcome', 'terminal'];
 
   const STR = {
     es: {
@@ -34,6 +34,8 @@
         ['contact', 'Cómo contactarme'],
         ['cv', 'Abre el CV en modo rápido'],
         ['open <app>', 'Abre una ventana (about, projects, skills…)'],
+        ['top', 'Abre el monitor del sistema 🖥️'],
+        ['cal', 'Calendario del mes'],
         ['ls', 'Lista los archivos'],
         ['neofetch', 'Información del sistema'],
         ['ping zulema', '¿Estoy disponible?'],
@@ -69,6 +71,7 @@
       catsHint: `Escribe ${k('meow')} para llamarlos o ${k('cats off')} para esconderlos.`,
       catsOff: 'Los gatos se han ido a dormir a otra habitación. 🌙',
       catsOn: '¡Han vuelto los gatos! 🐾',
+      calHint: 'Versión con festivos y citas: open calendario',
       thor: '⚡ Thor ha tirado tu taza de la mesa. Mirándote. Sin remordimientos.',
       hela: '👑 Hela te ha mirado, ha bostezado y ha seguido durmiendo. Es un honor.',
     },
@@ -85,6 +88,8 @@
         ['contact', 'How to reach me'],
         ['cv', 'Open the CV in quick view'],
         ['open <app>', 'Open a window (about, projects, skills…)'],
+        ['top', 'Open the system monitor 🖥️'],
+        ['cal', 'This month\'s calendar'],
         ['ls', 'List files'],
         ['neofetch', 'System information'],
         ['ping zulema', 'Am I available?'],
@@ -120,6 +125,7 @@
       catsHint: `Type ${k('meow')} to call them or ${k('cats off')} to hide them.`,
       catsOff: 'The cats went to nap in another room. 🌙',
       catsOn: 'The cats are back! 🐾',
+      calHint: 'Full version with holidays and meetings: open calendar',
       thor: '⚡ Thor just knocked your mug off the desk. Staring at you. No regrets.',
       hela: '👑 Hela looked at you, yawned and went back to sleep. You should feel honoured.',
     },
@@ -326,6 +332,31 @@
         window.ZPets.list().forEach((c) => print(`  <span class="c-lil">🐾</span> <b>${esc(c.name)}</b> ${c.emoji} ${dim('— ' + c.bio[lang()])}`));
         print(`<span class="c-dim">${S().catsHint}</span>`);
       },
+      top() {
+        print(S().opening('Monitor.exe'));
+        ctx.openApp('monitor');
+      },
+      cal() {
+        // Como el "cal" de Linux, con la semana empezando en lunes
+        const loc = lang() === 'es' ? 'es-ES' : 'en-GB';
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth();
+        const title = now.toLocaleDateString(loc, { month: 'long', year: 'numeric' });
+        const heads = Array.from({ length: 7 }, (_, i) =>
+          new Date(2024, 0, 1 + i).toLocaleDateString(loc, { weekday: 'short' }).replace('.', '').slice(0, 2));
+        const offset = (new Date(y, m, 1).getDay() + 6) % 7;
+        const days = new Date(y, m + 1, 0).getDate();
+        print(`<span class="c-lil">${esc(title.padStart(Math.floor((20 + title.length) / 2)))}</span>`);
+        print(heads.map(esc).join(' '));
+        let row = '   '.repeat(offset);
+        for (let d = 1; d <= days; d++) {
+          const cell = String(d).padStart(2, ' ');
+          row += d === now.getDate() ? `<span class="c-today">${cell}</span>` : cell;
+          if ((offset + d) % 7 === 0 || d === days) { print(row); row = ''; } else row += ' ';
+        }
+        print(dim(S().calHint));
+      },
       thor() { print(S().thor); },
       hela() { print(S().hela); },
       meow() {
@@ -340,6 +371,7 @@
       exp: commands.experience, edu: commands.education, dir: commands.ls, cls: commands.clear,
       ipconfig: commands.ifconfig, hello: commands.hola, hi: commands.hola, man: commands.help, '?': commands.help,
       gatos: commands.cats, pets: commands.cats, miau: commands.meow,
+      htop: commands.top, monitor: commands.top, calendar: commands.cal, calendario: commands.cal,
     });
 
     const run = async (raw) => {

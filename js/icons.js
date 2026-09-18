@@ -70,6 +70,19 @@
       <path fill="${INK}" d="M9 7h3v3H9v2H7v8h2v3h3v2h9v-2h3v-3h2v-8h-2v-2h-2V7h3v2h2v3h1v9h-1v3h-2v3h-4v1H12v-1H8v-3H6v-3H5v-9h1V9h3z"/>
       <path fill="#ff8fc7" d="M16 4h1v10h-1z"/>`),
 
+    monitor: svg(`<path fill="${INK}" d="M2 4h28v20H2zM12 24h8v3h4v3H8v-3h4z"/>
+      <path fill="#b79cf5" d="M3 5h26v2H3zM9 28h14v1H9z"/>
+      <path fill="#120f2e" d="M4 7h24v15H4z"/>
+      <path fill="#9dffb0" d="M5 18h3v-3h3v2h3v-6h3v4h3v-7h3v5h3v6H5z" opacity=".35"/>
+      <path fill="#9dffb0" d="M5 17h3v1H5zm3-3h3v1H8zm3 2h3v1h-3zm3-6h3v1h-3zm3 4h3v1h-3zm3-7h3v1h-3zm3 5h2v1h-2z"/>`),
+
+    calendar: svg(`<path fill="${INK}" d="M3 5h26v25H3z"/>
+      <path fill="#ff8fc7" d="M4 6h24v5H4z"/>
+      <path fill="#fff" d="M4 11h24v18H4z"/>
+      <path fill="${INK}" d="M8 2h3v6H8zm13 0h3v6h-3z"/>
+      <path fill="#cbbdf2" d="M7 14h3v3H7zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3zM7 19h3v3H7zm5 0h3v3h-3zm5 0h3v3h-3zM7 24h3v3H7zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3z"/>
+      <path fill="#6a4fd8" d="M22 19h3v3h-3z"/>`),
+
     // Botones de la barra de título
     btnMin: '<svg viewBox="0 0 8 8" aria-hidden="true"><path fill="currentColor" d="M1 6h6v2H1z"/></svg>',
     btnMax: '<svg viewBox="0 0 8 8" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 0h8v8H0zM1 2v5h6V2z"/></svg>',
