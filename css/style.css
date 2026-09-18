@@ -206,6 +206,12 @@ a { color: var(--blue); }
 .d-icon:hover span { background: rgba(29, 26, 63, .4); }
 .d-icon:focus-visible { outline: 1px dotted #fff; outline-offset: 0; }
 .d-icon:focus-visible span, .d-icon:active span { background: var(--blue); text-shadow: none; }
+.d-icon { touch-action: none; }
+/* Colocación libre (cuando el visitante ha movido algún icono) */
+.icons.free { inset: 0; display: block; pointer-events: none; }
+.icons.free .d-icon { position: absolute; pointer-events: auto; }
+.d-icon.dragging { z-index: 5; opacity: .85; cursor: grabbing; }
+.d-icon.dragging span { background: var(--blue); text-shadow: none; }
 .d-icon:active svg { filter: drop-shadow(2px 2px 0 rgba(20, 10, 60, .4)) brightness(.8) sepia(.4) hue-rotate(200deg); }
 
 /* ---------- Mascotas ---------- */

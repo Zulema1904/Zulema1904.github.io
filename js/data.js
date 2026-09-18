@@ -193,6 +193,7 @@ window.PORTFOLIO = {
         notes: 'Notas.txt',
       },
       openApp: 'Abrir',
+      arrange: 'Ordenar iconos',
       code: 'Código',
       cal: {
         today: 'Hoy',
@@ -437,6 +438,7 @@ window.PORTFOLIO = {
         notes: 'Notes.txt',
       },
       openApp: 'Open',
+      arrange: 'Arrange icons',
       code: 'Code',
       cal: {
         today: 'Today',

@@ -534,6 +534,119 @@
   function renderIcons() {
     iconsNav.innerHTML = DESKTOP_ICONS.map((id) =>
       `<button class="d-icon" data-open="${id}" aria-label="${esc(U().apps[id])}">${I[APPS[id].icon]}<span>${breakable(U().apps[id])}</span></button>`).join('');
+    applyLayout();
+  }
+
+  /* ---------- Iconos que se pueden mover ---------- */
+
+  // Colocación libre guardada por visitante: { id: { x, y } } en píxeles dentro del escritorio.
+  // Hay una para ordenador y otra para móvil, porque la rejilla cambia mucho.
+  const GRID = { x: 10, y: 12, w: 112, h: 98 };
+  const layoutKey = () => `zos-icons-${isMobile() ? 'mobile' : 'desktop'}`;
+  const loadLayout = () => { try { return JSON.parse(local.get(layoutKey())); } catch { return null; } };
+  const iconEls = () => $$('.d-icon', iconsNav);
+  const area = () => iconsNav.parentElement.getBoundingClientRect();
+
+  function setIconPos(el, x, y) {
+    const a = area();
+    el.style.left = `${clamp(x, 0, a.width - el.offsetWidth)}px`;
+    el.style.top = `${clamp(y, 0, a.height - el.offsetHeight)}px`;
+  }
+
+  // Casilla libre más cercana al principio de la rejilla (para iconos nuevos)
+  function freeCell(taken) {
+    const rows = Math.max(1, Math.floor((area().height - GRID.y) / GRID.h));
+    for (let i = 0; ; i++) {
+      const x = GRID.x + Math.floor(i / rows) * GRID.w;
+      const y = GRID.y + (i % rows) * GRID.h;
+      if (!taken.some((p) => p.x === x && p.y === y)) return { x, y };
+    }
+  }
+
+  function applyLayout() {
+    const layout = loadLayout();
+    iconsNav.classList.toggle('free', !!layout);
+    if (!layout) {
+      iconEls().forEach((el) => { el.style.left = ''; el.style.top = ''; });
+      return;
+    }
+    const taken = Object.values(layout);
+    iconEls().forEach((el) => {
+      const p = layout[el.dataset.open] || freeCell(taken);
+      taken.push(p);
+      setIconPos(el, p.x, p.y);
+    });
+  }
+
+  function saveLayout() {
+    const layout = {};
+    iconEls().forEach((el) => { layout[el.dataset.open] = { x: parseFloat(el.style.left), y: parseFloat(el.style.top) }; });
+    local.set(layoutKey(), JSON.stringify(layout));
+  }
+
+  // La primera vez que se arrastra, se "congela" la rejilla actual en posiciones libres
+  function freeze() {
+    if (iconsNav.classList.contains('free')) return;
+    const a = area();
+    const pos = iconEls().map((el) => { const r = el.getBoundingClientRect(); return [el, r.left - a.left, r.top - a.top]; });
+    iconsNav.classList.add('free');
+    pos.forEach(([el, x, y]) => setIconPos(el, x, y));
+  }
+
+  const snap = (v, origin, step, max) => clamp(origin + Math.round((v - origin) / step) * step, origin, Math.max(origin, origin + Math.floor((max - origin) / step) * step));
+
+  function drop(el, from) {
+    const a = area();
+    const x = snap(parseFloat(el.style.left), GRID.x, GRID.w, a.width - el.offsetWidth);
+    const y = snap(parseFloat(el.style.top), GRID.y, GRID.h, a.height - el.offsetHeight);
+    // Si ya hay un icono en esa casilla, se intercambian
+    const other = iconEls().find((o) => o !== el && Math.abs(parseFloat(o.style.left) - x) < GRID.w / 2 && Math.abs(parseFloat(o.style.top) - y) < GRID.h / 2);
+    if (other) setIconPos(other, from.x, from.y);
+    setIconPos(el, x, y);
+    saveLayout();
+  }
+
+  let suppressClick = false;
+  iconsNav.addEventListener('pointerdown', (e) => {
+    const el = e.target.closest('.d-icon');
+    if (!el || e.button !== 0) return;
+    const sx = e.clientX;
+    const sy = e.clientY;
+    const threshold = e.pointerType === 'touch' ? 10 : 5;
+    let origin = null;
+
+    const move = (ev) => {
+      if (!origin) {
+        if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < threshold) return;
+        freeze();
+        origin = { x: parseFloat(el.style.left), y: parseFloat(el.style.top) };
+        el.classList.add('dragging');
+      }
+      el.style.left = `${origin.x + ev.clientX - sx}px`;
+      el.style.top = `${origin.y + ev.clientY - sy}px`;
+    };
+    const end = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
+      if (!origin) return;
+      el.classList.remove('dragging');
+      drop(el, origin);
+      // El "click" que llega justo después de soltar no debe abrir la app
+      suppressClick = true;
+      setTimeout(() => { suppressClick = false; }, 0);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+  });
+  iconsNav.addEventListener('click', (e) => {
+    if (suppressClick) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
+
+  function resetIcons() {
+    local.del(layoutKey());
+    applyLayout();
   }
 
   function renderStart() {
@@ -547,6 +660,7 @@
           .map((id) => item(`data-open="${id}"`, I[APPS[id].icon], u.apps[id])).join('')}
         <li class="start-sep" role="separator"></li>
         ${item('data-action="feed"', I.bowl, u.pets.feed)}
+        ${item('data-action="arrange-icons"', I.folderLilac, u.arrange)}
         ${item('data-action="quick"', I.zap, u.quick)}
         ${item('data-open="welcome"', I.info, u.readme)}
         ${item('data-action="lang"', I.globe, u.langName)}
@@ -721,6 +835,7 @@
     print: () => window.print(),
     pets: () => { window.ZPets.toggle(); renderStart(); },
     feed: () => { toggleStart(false); window.ZPets.feed(); renderStart(); },
+    'arrange-icons': () => { toggleStart(false); resetIcons(); },
     'cal-move': (btn) => {
       const step = Number(btn.dataset.step);
       const now = new Date();
@@ -796,6 +911,7 @@
   });
   window.addEventListener('resize', () => {
     if (isMobile()) wins.forEach((w) => w.el.classList.add('maximized'));
+    applyLayout();
   });
 
   /* ---------- Inicio ---------- */
