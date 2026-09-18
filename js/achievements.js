@@ -16,7 +16,7 @@
     ['pet', '💜', false, { es: ['Mimos', 'Haz clic en uno de los gatos'], en: ['Cuddles', 'Click one of the cats'] }],
     ['cv', '📄', false, { es: ['Modo profesional', 'Abre el CV en modo rápido'], en: ['Professional mode', 'Open the CV in quick view'] }],
     ['explorer', '🗺️', false, { es: ['Exploración total', 'Abre 10 aplicaciones distintas'], en: ['Full explorer', 'Open 10 different apps'] }],
-    ['notebook', '📚', false, { es: ['Sed de saber', 'Visita los 7 temas de Apuntes'], en: ['Thirst for knowledge', 'Visit all 7 study notes topics'] }],
+    ['notebook', '📚', false, { es: ['Sed de saber', 'Visita todos los temas de Apuntes'], en: ['Thirst for knowledge', 'Visit every study notes topic'] }],
     ['terminal', '⌨️', false, { es: ['Alma de sysadmin', 'Ejecuta 15 comandos en la terminal'], en: ['Sysadmin soul', 'Run 15 commands in the terminal'] }],
     ['fortune', '🐱', false, { es: ['Sabiduría gatuna', 'Prueba fortune | catsay en la terminal'], en: ['Feline wisdom', 'Try fortune | catsay in the terminal'] }],
     ['subnet', '🌐', false, { es: ['Subnetting', 'Calcula una subred en Subredes.exe'], en: ['Subnetting', 'Calculate a subnet in Subnets.exe'] }],

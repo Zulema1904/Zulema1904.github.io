@@ -14,14 +14,16 @@
     python: 'def return if elif else for while in import from as class True False None and or not pass break continue try except with lambda',
     java: 'public private protected class extends implements interface abstract static final void int double boolean char long new return if else for while this super null true false try catch',
     sql: 'SELECT FROM WHERE INSERT INTO VALUES UPDATE SET DELETE CREATE TABLE PRIMARY KEY FOREIGN REFERENCES INT VARCHAR DECIMAL DATE ORDER BY DESC ASC JOIN ON GROUP HAVING AS AND OR NOT NULL LIKE IN BETWEEN LIMIT',
-    bash: 'git init status add commit log switch merge clone pull push diff restore config remote revert sqlite3 python javac java php pip',
+    bash: 'git init status add commit log switch merge clone pull push diff restore config remote revert sqlite3 python javac java php pip docker run build pull images ps stop rm rmi logs exec compose up down system prune',
+    docker: 'FROM WORKDIR COPY RUN ENV EXPOSE CMD ENTRYPOINT ARG',
+    yaml: 'services build image ports volumes environment depends_on',
     js: 'const let var function return if else for while of in new class this null undefined true false async await try catch typeof document console',
     php: 'echo function return if else elseif foreach for while as new class public private require include isset empty null true false try catch string int float bool array',
     html: 'DOCTYPE html head body meta title link h1 h2 p strong img a header nav main article section footer div span',
     css: 'color background border padding margin display gap justify content align items flex direction media max width box sizing font size solid white black center column',
   };
   const COMMENTS = {
-    python: '#[^\\n]*|"""[\\s\\S]*?"""', java: '//[^\\n]*', sql: '--[^\\n]*', bash: '#[^\\n]*',
+    python: '#[^\\n]*|"""[\\s\\S]*?"""', java: '//[^\\n]*', sql: '--[^\\n]*', bash: '#[^\\n]*', docker: '#[^\\n]*', yaml: '#[^\\n]*',
     html: '<!--[\\s\\S]*?-->', css: '/\\*[\\s\\S]*?\\*/',
     js: '//[^\\n]*|/\\*[\\s\\S]*?\\*/', php: '//[^\\n]*|/\\*[\\s\\S]*?\\*/',
   };

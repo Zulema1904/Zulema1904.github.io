@@ -1664,4 +1664,244 @@ git clone https://github.com/Zulema1904/zulemaos-monitor.git`,
       },
     ],
   },
+
+  /* ================================================================ Docker */
+  {
+    id: 'docker',
+    icon: '🐳',
+    color: '#8fd3ff',
+    lang: 'bash',
+    title: { es: 'Docker', en: 'Docker' },
+    sections: [
+      {
+        h: { es: '¿Qué es Docker?', en: 'What is Docker?' },
+        p: {
+          es: "Empaqueta una aplicación **con todo lo que necesita** (lenguaje, librerías, configuración) para que funcione igual en tu PC, en el de otra persona o en un servidor. Se acabó el «en mi ordenador funciona».",
+          en: "It packages an application **with everything it needs** (language, libraries, configuration) so it runs the same on your PC, someone else's or a server. No more “it works on my machine”.",
+        },
+        table: {
+          es: [
+            ['Concepto', 'Qué es', 'Se parece a'],
+            ['Imagen', 'Plantilla de solo lectura con todo instalado', 'Una receta'],
+            ['Contenedor', 'Una imagen en marcha, aislada del resto', 'El plato cocinado'],
+            ['Dockerfile', 'Instrucciones para construir una imagen', 'Escribir la receta'],
+            ['Volumen', 'Carpeta que sobrevive al contenedor', 'Un táper'],
+            ['Registro', 'Almacén de imágenes (Docker Hub)', 'Un recetario compartido'],
+          ],
+          en: [
+            ['Concept', 'What it is', 'Think of it as'],
+            ['Image', 'Read-only template with everything installed', 'A recipe'],
+            ['Container', 'A running image, isolated from the rest', 'The cooked dish'],
+            ['Dockerfile', 'Instructions to build an image', 'Writing the recipe'],
+            ['Volume', 'Folder that outlives the container', 'A lunchbox'],
+            ['Registry', 'Image store (Docker Hub)', 'A shared cookbook'],
+          ],
+        },
+        cat: {
+          who: 'thor',
+          es: "Un contenedor es como una caja de cartón: dentro tengo todo lo que necesito y nadie de fuera me molesta.",
+          en: "A container is like a cardboard box: everything I need is inside and nobody outside bothers me.",
+        },
+      },
+      {
+        h: { es: 'Instalar y comprobar', en: 'Install and check' },
+        p: {
+          es: "En Windows y Mac se instala **Docker Desktop** (en Windows usa WSL 2 por debajo). En Linux, el paquete `docker`. Para comprobar que todo va bien:",
+          en: "On Windows and Mac you install **Docker Desktop** (on Windows it uses WSL 2 underneath). On Linux, the `docker` package. To check everything works:",
+        },
+        code: {
+          es: `docker --version
+docker run hello-world    # descarga una imagen de prueba y la ejecuta`,
+          en: `docker --version
+docker run hello-world    # downloads a test image and runs it`,
+        },
+      },
+      {
+        h: { es: 'Imágenes y contenedores', en: 'Images and containers' },
+        code: {
+          es: `docker pull python:3.12-slim        # descarga una imagen
+docker images                       # imágenes que tienes
+docker run -it python:3.12-slim     # contenedor interactivo (sal con exit())
+docker ps                           # contenedores en marcha
+docker ps -a                        # …y también los parados
+docker stop mi-contenedor           # lo detiene
+docker rm mi-contenedor             # lo borra
+docker rmi python:3.12-slim         # borra la imagen`,
+          en: `docker pull python:3.12-slim        # download an image
+docker images                       # images you have
+docker run -it python:3.12-slim     # interactive container (leave with exit())
+docker ps                           # running containers
+docker ps -a                        # …and stopped ones too
+docker stop my-container            # stop it
+docker rm my-container              # delete it
+docker rmi python:3.12-slim         # delete the image`,
+        },
+        tip: {
+          es: "Con `docker run --rm` el contenedor se borra solo al terminar: ideal para pruebas rápidas.",
+          en: "With `docker run --rm` the container deletes itself when it finishes: perfect for quick tests.",
+        },
+      },
+      {
+        h: { es: 'Puertos y volúmenes', en: 'Ports and volumes' },
+        p: {
+          es: "Un contenedor está aislado: para verlo desde el navegador hay que **publicar un puerto** (`-p tu_pc:contenedor`), y para que use tus archivos, **montar una carpeta** (`-v tu_carpeta:ruta_dentro`).",
+          en: "A container is isolated: to reach it from the browser you **publish a port** (`-p your_pc:container`), and to use your files you **mount a folder** (`-v your_folder:path_inside`).",
+        },
+        code: {
+          es: `# Servidor web nginx en http://localhost:8080 sirviendo tu carpeta actual
+docker run -d --name web -p 8080:80 -v "$PWD":/usr/share/nginx/html nginx
+
+docker logs web           # ver lo que escribe
+docker exec -it web sh    # abrir una terminal dentro
+docker stop web`,
+          en: `# nginx web server at http://localhost:8080 serving your current folder
+docker run -d --name web -p 8080:80 -v "$PWD":/usr/share/nginx/html nginx
+
+docker logs web           # see what it prints
+docker exec -it web sh    # open a shell inside
+docker stop web`,
+        },
+        warn: {
+          es: "Lo que se guarda **dentro** de un contenedor desaparece al borrarlo. Los datos importantes, siempre en un volumen.",
+          en: "Anything saved **inside** a container disappears when you delete it. Important data always goes in a volume.",
+        },
+      },
+      {
+        h: { es: 'Tu propio Dockerfile', en: 'Your own Dockerfile' },
+        p: {
+          es: "Cada instrucción crea una **capa**. Docker reutiliza las capas que no han cambiado, así que copia primero las dependencias y después el código: si solo cambias el código, no vuelve a instalar nada.",
+          en: "Each instruction creates a **layer**. Docker reuses layers that haven't changed, so copy the dependencies first and the code afterwards: if you only change the code, nothing gets reinstalled.",
+        },
+        lang: 'docker',
+        code: {
+          es: `# Imagen base: Python ya instalado sobre un Linux pequeñito
+FROM python:3.12-slim
+
+# Carpeta de trabajo dentro del contenedor
+WORKDIR /app
+
+# 1) Dependencias (cambian poco → capa reutilizable)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 2) El código (cambia mucho)
+COPY . .
+
+EXPOSE 8000
+CMD ["python", "app.py"]`,
+          en: `# Base image: Python already installed on a tiny Linux
+FROM python:3.12-slim
+
+# Working folder inside the container
+WORKDIR /app
+
+# 1) Dependencies (rarely change → reusable layer)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 2) The code (changes a lot)
+COPY . .
+
+EXPOSE 8000
+CMD ["python", "app.py"]`,
+        },
+      },
+      {
+        h: { es: 'Construir y ejecutar', en: 'Build and run' },
+        code: {
+          es: `docker build -t mi-app .            # construye la imagen (el . es la carpeta del Dockerfile)
+docker run --rm -p 8000:8000 mi-app  # la ejecuta
+docker build -t mi-app:1.0 .        # con etiqueta de versión`,
+          en: `docker build -t my-app .            # build the image (. is the Dockerfile's folder)
+docker run --rm -p 8000:8000 my-app  # run it
+docker build -t my-app:1.0 .        # with a version tag`,
+        },
+        tip: {
+          es: "Añade un `.dockerignore` (como el `.gitignore`) para no meter en la imagen `.git`, `.venv` ni datos pesados.",
+          en: "Add a `.dockerignore` (like `.gitignore`) so `.git`, `.venv` and heavy data don't end up in the image.",
+        },
+      },
+      {
+        h: { es: 'Docker Compose: varios contenedores', en: 'Docker Compose: several containers' },
+        p: {
+          es: "Una app real suele necesitar varias piezas (web + base de datos). Con un `docker-compose.yml` las describes todas y las arrancas con un solo comando.",
+          en: "A real app usually needs several pieces (web + database). With a `docker-compose.yml` you describe them all and start them with a single command.",
+        },
+        lang: 'yaml',
+        code: {
+          es: `# docker-compose.yml
+services:
+  web:
+    build: .                # usa el Dockerfile de esta carpeta
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: cambiame
+    volumes:
+      - datos:/var/lib/postgresql/data   # los datos sobreviven
+
+volumes:
+  datos:`,
+          en: `# docker-compose.yml
+services:
+  web:
+    build: .                # uses the Dockerfile in this folder
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - data:/var/lib/postgresql/data    # the data survives
+
+volumes:
+  data:`,
+        },
+      },
+      {
+        h: { es: 'Comandos de Compose', en: 'Compose commands' },
+        code: {
+          es: `docker compose up -d        # arranca todo en segundo plano
+docker compose ps           # estado de cada servicio
+docker compose logs -f web  # sigue los mensajes de "web"
+docker compose run --rm web pytest   # ejecuta un comando puntual
+docker compose down         # para y borra los contenedores (los volúmenes se quedan)`,
+          en: `docker compose up -d        # start everything in the background
+docker compose ps           # status of each service
+docker compose logs -f web  # follow the output of "web"
+docker compose run --rm web pytest   # run a one-off command
+docker compose down         # stop and remove the containers (volumes stay)`,
+        },
+        cat: {
+          who: 'hela',
+          es: "Compose es como organizar la casa: cada gato con su cama, su comedero y su arenero, y todo se monta de una vez.",
+          en: "Compose is like setting up the house: each cat gets a bed, a bowl and a litter box, all set up in one go.",
+        },
+      },
+      {
+        h: { es: 'Limpieza y buenas prácticas', en: 'Cleanup and good practices' },
+        code: {
+          es: `docker system df        # cuánto ocupa Docker
+docker system prune     # borra contenedores parados e imágenes sin usar`,
+          en: `docker system df        # how much space Docker uses
+docker system prune     # remove stopped containers and unused images`,
+        },
+        tip: {
+          es: "Usa imágenes oficiales y con versión (`python:3.12-slim`, no `python:latest`): así tu proyecto no cambia solo el día que sale una versión nueva.",
+          en: "Use official, versioned images (`python:3.12-slim`, not `python:latest`): that way your project doesn't change by itself when a new version comes out.",
+        },
+        warn: {
+          es: "**Nunca** metas contraseñas en el Dockerfile: quedan guardadas en la imagen. Pásalas con variables de entorno o un archivo `.env` que no subas a Git.",
+          en: "**Never** put passwords in a Dockerfile: they stay stored in the image. Pass them as environment variables or in a `.env` file you don't commit to Git.",
+        },
+      },
+    ],
+  },
 ];
